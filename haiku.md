@@ -6,7 +6,7 @@ This is my Haiku
 
 
 
-
-
+We do a mild
+amount of coding
 
 Goodbye world!
