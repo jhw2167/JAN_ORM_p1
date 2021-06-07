@@ -12,7 +12,7 @@ A world of struggle.
 
 
 We do a mild
-oh no, haiku gone
+
 
 
 Goodbye world!
