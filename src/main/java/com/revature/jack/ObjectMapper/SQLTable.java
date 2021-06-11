@@ -1,9 +1,9 @@
 package com.revature.jack.ObjectMapper;
 
 
+import java.util.HashMap;
 //IMPORTS
-import com.revature.jack.utils.Pair;
-import java.util.List;
+import java.util.Map;
 
 /*
  * 	SQLTable object holds the table name and list of all STRING
@@ -16,7 +16,9 @@ public class SQLTable
 	
 	//Declare vars
 	private String tableName;
-	private List<Pair<String,String>> columns;
+	
+	//Maps column NAMES to column SQL TYPES
+	private Map<String, String> columns;
 	
 	
 	
@@ -24,6 +26,7 @@ public class SQLTable
 	public SQLTable(String tableName) {
 		super();
 		this.tableName = tableName;
+		columns = new HashMap<>();
 	}
 	//End Constructor
 
@@ -42,27 +45,42 @@ public class SQLTable
 	//END SET TABLE NAME
 
 
-	public List<Pair<String, String>> getColumns() {
-		return columns;
-	}
-	//END GET COLUMNS
-
-
-	public void setColumns(List<Pair<String, String>> columns) {
-		this.columns = columns;
-	}
-	//END SET COLUMNS
-	
 	
 	/* Other Methods */
-	public void addCol(Pair<String, String> p) {
-		columns.add(p);
+	public void addCol(String colName, String colType) {
+		columns.put(colName, colType);
 	}
+	//END METHOD ADDCOL
+	
+	public boolean removeCol(String colName) {
+		return columns.remove(colName) != null;
+	}
+	//END METHOD REMOVECOL
 	
 	
-	public boolean removeCol(Pair<String, String> p) {
-		return columns.removeIf((val) -> val.v1.equals(p.v1));
+	public boolean contains(String colName) {
+		return columns.containsKey(colName);
 	}
+	//END METHOD CONTAINS
+	
+	public Map<String, String> getColumns() {
+		return columns;
+	}
+	//END METHOD getCOLUMNS
+
+	public void setColumns(Map<String, String> columns) {
+		this.columns = columns;
+	}
+	//END METHOD getCOLUMNS
+
+
+	@Override
+	public String toString() {
+		return "SQLTable [tableName=" + tableName + ", columns=" + columns + "]";
+	}
+
+	
+	
 	
 }
 //END CLASS 

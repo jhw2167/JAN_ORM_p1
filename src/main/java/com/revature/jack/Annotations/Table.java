@@ -7,9 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation to declare an object represents a table inside of a database.
- * name is the name of the table inside of the database.
+ * 		Table annotation is to be applied to a CLASS declaration
+ * 		and indicates the the user would like to create this 
+ * 		object as a class in SQL
+ * 
  */
+
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Table {

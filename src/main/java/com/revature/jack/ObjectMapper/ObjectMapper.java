@@ -1,11 +1,12 @@
 package com.revature.jack.ObjectMapper;
 
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 //IMPORTS
-import java.util.List;
-import com.revature.jack.utils.*;
+import java.util.Map;
+
+import com.revature.jack.Annotations.*;
 
 
 /*
@@ -17,13 +18,28 @@ import com.revature.jack.utils.*;
 public class ObjectMapper {
 
 	//Declare variables
-	public List<SQLTable> tables;
+	
+	public static Map<Class<?>, SQLTable> tables;
+	//map to enforce only 1 table per class
+	
+	public static Map<Class<?>, String> typeMap = new HashMap<>();
+	
+	static {
+		//init our typemap
+		typeMap.put(int.class, "INTEGER");
+		typeMap.put(Integer.class, "INTEGER");
+		typeMap.put(String.class, "TEXT");
+		typeMap.put(float.class, "NUMERIC");
+	}
 	
 	/* Methods */
 	
 	
 	//Constructor
-	
+	private ObjectMapper() {
+		super();
+		//not instatiated
+	}
 	
 	//to SQL obj
 	
@@ -33,18 +49,36 @@ public class ObjectMapper {
 		 * relevat values in a java class passed by the user 
 		 */
 		
+		//WE NEED TO THROW SOME EXCEPTION ON ERRORS
+		
+		if(!c.isAnnotationPresent(Table.class)) {
+			System.out.println("Class not mappable: please annotated " + 
+		"classes with @Table and fields with @Column");
+			return null;
+		}
+		
+		//Create new SQL table
+		SQLTable table = new SQLTable(c.getAnnotation(Table.class).name());
 		
 		//Get all annotations
 		Field[] fields = c.getDeclaredFields();
 		
 		//parse through and get variables
-		
-		//create pair with variable fields and name
-		
-		//create new SQL Table
-		
-		
-		
+		for (Field f : fields)
+		{
+			
+			if(f.isAnnotationPresent(Column.class)) 
+			{
+				String colName = f.getAnnotation(Column.class).name();
+				if (table.contains(colName)) {
+					return null;
+				} // else
+				table.addCol(colName, typeMap.get(f.getType()));
+
+			}
+		}
+
+		return table;
 	}
 	
 }
