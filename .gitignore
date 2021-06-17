@@ -21,6 +21,3 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-
-# Other files to ignore
-target/classes/META-INF/maven/com.revature/JAN_ORM_p1/pom.properties
