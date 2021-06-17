@@ -14,6 +14,7 @@ public class ObjectMapper {
 
 	public static void createClassTable(Object obj, Connection conn) {
 		PreparedStatement pstmt;
+		
 		final String addObjectSQL = "CREATE TABLE ? (";
 		try {
 			pstmt = conn.prepareStatement(addObjectSQL);
