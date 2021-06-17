@@ -17,10 +17,10 @@ public class SQLTable
 	//Declare vars
 	private String tableName;
 	
-	//Maps column NAMES to column SQL TYPES
-	private Map<String, String> columns;
-	
-	
+	//Maps column NAMES to column TYPES
+	private Map<String, SQLColumn> columns;
+		
+		
 	
 	/* Define Methods */
 	public SQLTable(String tableName) {
@@ -47,8 +47,8 @@ public class SQLTable
 
 	
 	/* Other Methods */
-	public void addCol(String colName, String colType) {
-		columns.put(colName, colType);
+	public void addCol(SQLColumn col) {
+		columns.put(col.getName(), col);
 	}
 	//END METHOD ADDCOL
 	
@@ -63,12 +63,12 @@ public class SQLTable
 	}
 	//END METHOD CONTAINS
 	
-	public Map<String, String> getColumns() {
+	public Map<String, SQLColumn> getColumns() {
 		return columns;
 	}
 	//END METHOD getCOLUMNS
 
-	public void setColumns(Map<String, String> columns) {
+	public void setColumns(Map<String, SQLColumn> columns) {
 		this.columns = columns;
 	}
 	//END METHOD getCOLUMNS

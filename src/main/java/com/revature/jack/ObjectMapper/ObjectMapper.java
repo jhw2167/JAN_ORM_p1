@@ -22,16 +22,6 @@ public class ObjectMapper {
 	public static Map<Class<?>, SQLTable> tables;
 	//map to enforce only 1 table per class
 	
-	public static Map<Class<?>, String> typeMap = new HashMap<>();
-	
-	static {
-		//init our typemap
-		typeMap.put(int.class, "INTEGER");
-		typeMap.put(Integer.class, "INTEGER");
-		typeMap.put(String.class, "TEXT");
-		typeMap.put(float.class, "NUMERIC");
-	}
-	
 	/* Methods */
 	
 	
@@ -52,8 +42,10 @@ public class ObjectMapper {
 		//WE NEED TO THROW SOME EXCEPTION ON ERRORS
 		
 		if(!c.isAnnotationPresent(Table.class)) {
-			System.out.println("Class not mappable: please annotated " + 
+			System.out.println("Class not mappable: please annotate " + 
 		"classes with @Table and fields with @Column");
+			
+			//maybe throw "notMappable"
 			return null;
 		}
 		
@@ -63,22 +55,26 @@ public class ObjectMapper {
 		//Get all annotations
 		Field[] fields = c.getDeclaredFields();
 		
+		
 		//parse through and get variables
-		for (Field f : fields)
-		{
-			
+		for (Field f : fields) {
 			if(f.isAnnotationPresent(Column.class)) 
 			{
 				String colName = f.getAnnotation(Column.class).name();
 				if (table.contains(colName)) {
+					//throw NotMapable
 					return null;
-				} // else
+				} // else if (name is SQL keyword)...
+				//else add to column
 				table.addCol(colName, typeMap.get(f.getType()));
-
 			}
 		}
+		//End For
 
 		return table;
 	}
+	//END ObjectMapper::TOTABLE
 	
+	
+
 }
