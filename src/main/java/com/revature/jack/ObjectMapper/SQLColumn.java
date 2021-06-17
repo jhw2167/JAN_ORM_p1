@@ -34,7 +34,6 @@ public class SQLColumn
 	
 	//Type Mapper
 	public static final Map<Class<?>, String> typeMap = new HashMap<>();
-	
 	static {
 		loadSQLJavaValuePairs();
 	}
@@ -109,6 +108,8 @@ public class SQLColumn
 		if(field.isAnnotationPresent(ForeignKey.class)) {
 			ForeignKey fkObject = field.getAnnotation(ForeignKey.class);
 			this.fk = new Pair<>(fkObject.refTable, fkObject.refColumn);
+		} else {
+			this.fk = null;
 		}
 	}
 	

@@ -13,6 +13,7 @@ import java.util.Date;
 @Table(name="CarTest")
 public class Car {
 	
+	@PrimaryKey
 	@Column(name="model")
 	private String model;
 	
