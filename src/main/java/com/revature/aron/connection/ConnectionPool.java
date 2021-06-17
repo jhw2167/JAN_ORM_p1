@@ -20,7 +20,7 @@ public class ConnectionPool {
 	static final String JDBC_URL = "jdbc:postgresql://localhost:5432/postgres";
 
 	static final String JDBC_USER = "postgres";
-	static final String JDBC_PASS = "postgres";
+	static final String JDBC_PASS = "password";
 
 	// Typically supply this through a gitignored application.properties file OR
 	// environment variables;
