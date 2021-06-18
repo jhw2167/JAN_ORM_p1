@@ -2,11 +2,21 @@ package com.revature.aron.connection;
 
 import javax.sql.DataSource;
 
+//Connnection Pool Imports
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
+
+//Java Util imports
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+//Logger Imports
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConnectionPool {
 	// We use this class to supply database credentials and attain an object called
@@ -25,10 +35,19 @@ public class ConnectionPool {
 	// Typically supply this through a gitignored application.properties file OR
 	// environment variables;
 	private static GenericObjectPool gPool = null;
+	
+	//Logger
+	private static final Logger log = LoggerFactory.getLogger(ConnectionPool.class);
 
-	public DataSource setUpPool() throws Exception {
-
-		Class.forName(JDBC_DRIVER);
+	public DataSource setUpPool()  
+	{
+		try {
+			Class.forName(JDBC_DRIVER);
+		} catch (ClassNotFoundException e){
+			log.error("Fatal Error, cannot find library class: " + JDBC_DRIVER);
+			System.exit(1);
+		}
+		
 
 		// Create an instance of GenericObjectPool that holds our POOl of Connection
 		// Objects

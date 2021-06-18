@@ -27,9 +27,10 @@ public class SQLColumn
 	private final String sqlType;
 	
 	private final boolean pk;
-	private final Pair<SQLTable, SQLColumn> fk;
+	private final Pair<Class<?>, Field> fk;
 	private final boolean unique;
 	private final boolean notNull;
+	private final String defaultValue;
 	private final String checkStmt;
 	
 	//Type Mapper
@@ -53,14 +54,15 @@ public class SQLColumn
 		this.fk = null;
 		this.unique = false;
 		this.notNull = false;
+		this.defaultValue = null;
 		this.checkStmt = null;
 	}
 	//END BASE CONSTRUCTOR
 	
 	
 	//Create column with constraints
-	public SQLColumn(String name, Class javaType, String sqlType, boolean pk, Pair<SQLTable, SQLColumn> fk, boolean unique, boolean notNull,
-			String checkStmt) 
+	public SQLColumn(String name, Class javaType, String sqlType, boolean pk, Pair<Class<?>, Field> fk, boolean unique, boolean notNull,
+			String defaultValue, String checkStmt) 
 	{
 		super();
 		this.name = name;
@@ -70,6 +72,7 @@ public class SQLColumn
 		this.fk = fk;
 		this.unique = unique;
 		this.notNull = notNull;
+		this.defaultValue = defaultValue;
 		this.checkStmt = (checkStmt.equals("")) ? null : checkStmt;
 	}
 	//END FULL CONSTRUCTOR
@@ -89,7 +92,7 @@ public class SQLColumn
 		if (!typeMap.containsKey(field.getClass())) {
 			String err = "Can't deduce SQL type for column " + field.getName();
 			err += " of java type " + field.getClass().toGenericString();
-			err += ": complex objects will have to be their own tables";
+			err += ": complex objects will have to be their own tables, see documentation";
 			throw new Exception(err);
 		}
 		
@@ -99,15 +102,20 @@ public class SQLColumn
 		this.javaType = field.getClass();
 		this.sqlType = typeMap.get(field.getClass());
 		
-		this.pk = (field.isAnnotationPresent(PrimaryKey.class)) ? true : false;
-		this.unique = unique;
-		this.notNull = notNull;
-		this.checkStmt = (checkStmt.equals("")) ? null : checkStmt;
+		this.pk = field.isAnnotationPresent(PrimaryKey.class);
+		this.unique = field.isAnnotationPresent(Unique.class);
+		this.notNull = field.isAnnotationPresent(NotNull.class);
+		this.defaultValue = (field.isAnnotationPresent(DefaultValue.class)) ?
+				field.getAnnotation(DefaultValue.class).defaultValue() : null;
+		this.checkStmt = (field.isAnnotationPresent(CheckColumn.class)) ?
+				field.getAnnotation(CheckColumn.class).checkStmt() : null;
 		
 		//Establishing foreign key takes a little bit of work
 		if(field.isAnnotationPresent(ForeignKey.class)) {
 			ForeignKey fkObject = field.getAnnotation(ForeignKey.class);
-			this.fk = new Pair<>(fkObject.refTable, fkObject.refColumn);
+			Class<?> fkClass = fkObject.refTable();
+			Field fkColName = fkClass.getField(fkObject.refColumn());
+			this.fk = new Pair<Class<?>, Field>(fkClass, fkColName);
 		} else {
 			this.fk = null;
 		}
@@ -136,7 +144,7 @@ public class SQLColumn
 	}
 
 
-	public Pair<SQLTable, SQLColumn> getFk() {
+	public Pair<Class<?>, Field> getFk() {
 		return fk;
 	}
 
@@ -150,6 +158,9 @@ public class SQLColumn
 		return notNull;
 	}
 
+	public String getDefaultValue() {
+		return defaultValue;
+	}
 
 	public String getCheckStmt() {
 		return checkStmt;
@@ -171,11 +182,13 @@ public class SQLColumn
 		return true;
 	}
 	
-	
-	public boolean isProperType(Object o1) {
+	/*
+	 * Returns true if this object you intend to load into this column 
+	 * is of the proper class
+	 */
+	public boolean isObjectOfProperType(Object o1) {
 		return javaType.equals(o1.getClass());
 	}
-	
 	
 	
 	private static void loadSQLJavaValuePairs() {

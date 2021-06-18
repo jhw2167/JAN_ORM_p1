@@ -1,13 +1,25 @@
 package com.revature.jack.ObjectMapper;
 
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 //IMPORTS
+
+//Reflection Imports
+import java.lang.reflect.Field;
+
+//Java SQL imports
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+//Java Lib Imports
+import java.util.HashMap;
 import java.util.Map;
 
+//Project Imports
 import com.revature.jack.Annotations.*;
-
+import com.revature.aron.connection.*;
 
 /*
  *  	Simple java object mapper class to TAKE IN an object of type class
@@ -19,8 +31,14 @@ public class ObjectMapper {
 
 	//Declare variables
 	
-	public static Map<Class<?>, SQLTable> tables;
 	//map to enforce only 1 table per class
+	private static Map<Class<?>, SQLTable> tables;
+	
+	private static ConnectionPool conn = new ConnectionPool();
+	
+	static {
+		conn.setUpPool();
+	}
 	
 	/* Methods */
 	
@@ -33,7 +51,7 @@ public class ObjectMapper {
 	
 	//to SQL obj
 	
-	public static SQLTable toTable(Class<?> c) {
+	public static SQLTable toTable(Class<?> c) throws Exception {
 		/*
 		 * Use *reflection* to get the annotations and names of all
 		 * relevat values in a java class passed by the user 
@@ -52,21 +70,13 @@ public class ObjectMapper {
 		//Create new SQL table
 		SQLTable table = new SQLTable(c.getAnnotation(Table.class).name());
 		
-		//Get all annotations
+		//Get all fields
 		Field[] fields = c.getDeclaredFields();
-		
 		
 		//parse through and get variables
 		for (Field f : fields) {
-			if(f.isAnnotationPresent(Column.class)) 
-			{
-				String colName = f.getAnnotation(Column.class).name();
-				if (table.contains(colName)) {
-					//throw NotMapable
-					return null;
-				} // else if (name is SQL keyword)...
-				//else add to column
-				table.addCol(colName, typeMap.get(f.getType()));
+			if(f.isAnnotationPresent(Column.class)) {
+				table.addCol(new SQLColumn(f));
 			}
 		}
 		//End For
@@ -75,6 +85,23 @@ public class ObjectMapper {
 	}
 	//END ObjectMapper::TOTABLE
 	
+	
+	/*
+	 * Drop table query
+	 */
+	public static boolean dropTable(SQLTable table, boolean cascade) throws SQLException 
+	{
+		String query = "DROP TABLE IF EXISTS " + table.getTableName();
+		
+		if(cascade) {
+			query += " CASCADE";
+		}
+		query += ";";
+		
+		//Set and executre our prepared statement
+		
+		
+	}
 	
 
 }

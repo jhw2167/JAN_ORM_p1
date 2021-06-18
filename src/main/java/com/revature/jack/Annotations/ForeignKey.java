@@ -10,9 +10,9 @@ import com.revature.jack.ObjectMapper.SQLColumn;
 import com.revature.jack.ObjectMapper.SQLTable;
 
 
-@Target(ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ForeignKey {
-	public static final Class<?> refTable = null;
-	public static final Field refColumn = null;
+	public Class<?> refTable();
+	public String refColumn();
 }
