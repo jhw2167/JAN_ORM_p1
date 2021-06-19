@@ -1,6 +1,7 @@
 package com.revature.jack.ObjectMapper;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,22 +90,23 @@ public class SQLColumn
 		}
 		
 		//Ensure java object is of simple type
-		if (!typeMap.containsKey(field.getClass())) {
-			String err = "Can't deduce SQL type for column " + field.getName();
-			err += " of java type " + field.getClass().toGenericString();
-			err += ": complex objects will have to be their own tables, see documentation";
+		if (!typeMap.containsKey(field.getType())) {
+			String err = "Can't deduce SQL type for column: '" + field.getName();
+			err += "' of java type: '" + field.getType().toGenericString();
+			err += "'. complex objects will have to be their own tables, see documentation";
 			throw new Exception(err);
 		}
 		
 		
 		//Establish vars
 		this.name = field.getName();
-		this.javaType = field.getClass();
-		this.sqlType = typeMap.get(field.getClass());
+		this.javaType = field.getType();
+		this.sqlType = typeMap.get(field.getType());
 		
 		this.pk = field.isAnnotationPresent(PrimaryKey.class);
-		this.unique = field.isAnnotationPresent(Unique.class);
-		this.notNull = field.isAnnotationPresent(NotNull.class);
+		this.unique = field.isAnnotationPresent(Unique.class) && !pk;
+		this.notNull = field.isAnnotationPresent(NotNull.class) && !pk;
+		
 		this.defaultValue = (field.isAnnotationPresent(DefaultValue.class)) ?
 				field.getAnnotation(DefaultValue.class).defaultValue() : null;
 		this.checkStmt = (field.isAnnotationPresent(CheckColumn.class)) ?
@@ -203,6 +205,7 @@ public class SQLColumn
 		typeMap.put(Integer.class, "INTEGER");
 		typeMap.put(String.class, "TEXT");
 		typeMap.put(float.class, "NUMERIC");
+		typeMap.put(Date.class, "DATE");
 	}
 	
 	

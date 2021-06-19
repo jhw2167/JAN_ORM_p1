@@ -27,7 +27,7 @@ public class ConnectionPool {
 
 	// JDBC Driver Name and Database URL
 	static final String JDBC_DRIVER = "org.postgresql.Driver";
-	static final String JDBC_URL = "jdbc:postgresql://localhost:5432/postgres";
+	static final String JDBC_URL = "jdbc:postgresql://localhost:5432/postgres?currentSchema=automobiles";
 
 	static final String JDBC_USER = "postgres";
 	static final String JDBC_PASS = "password";

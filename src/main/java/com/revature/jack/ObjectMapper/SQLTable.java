@@ -1,7 +1,9 @@
 package com.revature.jack.ObjectMapper;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 //IMPORTS
 import java.util.Map;
 
@@ -19,14 +21,16 @@ public class SQLTable
 	
 	//Maps column NAMES to column TYPES
 	private Map<String, SQLColumn> columns;
+	private List<Class<?>> references;
 		
-		
+	
 	
 	/* Define Methods */
 	public SQLTable(String tableName) {
 		super();
 		this.tableName = tableName;
 		columns = new HashMap<>();
+		references = new ArrayList<>();
 	}
 	//End Constructor
 
@@ -44,11 +48,17 @@ public class SQLTable
 	}
 	//END SET TABLE NAME
 
-
+	public List<Class<?>> getReferences() {
+		return references;
+	}
 	
 	/* Other Methods */
 	public void addCol(SQLColumn col) {
 		columns.put(col.getName(), col);
+		
+		if(col.getFk() != null) {
+			references.add(col.getFk().v1);
+		}
 	}
 	//END METHOD ADDCOL
 	

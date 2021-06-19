@@ -19,6 +19,8 @@ import java.util.Collection;
 //Java Lib Imports
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +46,7 @@ public class ObjectMapper {
 	//Declare variables
 	
 	//map to enforce only 1 table per class
-	private static Map<Class<?>, SQLTable> tables;
+	private static Map<Class<?>, SQLTable> tables = new HashMap<>();
 	private static ConnectionPool cp = new ConnectionPool();
 	private static DataSource ds;
 	static {
@@ -104,12 +106,29 @@ public class ObjectMapper {
 	 *  use it unless you want to start fresh
 	 */
 	public static void buildDBFromModel() throws SQLException {
-		Collection<SQLTable> buildables = tables.values();
+		Collection<SQLTable> buildables = orderTablesByFK();
 		for (SQLTable t : buildables) {
 			createTable(t);
 		}
 	}
 	//END BUILDMODEL METHOD
+	
+	/*
+	 * We need to order the tables correctly so that Foreign keys 
+	 */
+	private static Collection<SQLTable> orderTablesByFK() throws Exception //Throws ForeignKeyException 
+	{
+		Collection<SQLTable> buildables = tables.values();
+		List<SQLTable> sorted = new LinkedList<>();
+		Map<Class<?>, Iterator<SQLTable>> map = new HashMap<>();
+		
+		//Alternative, set, queue implementation
+		Set<SQLTable> ordered = new HashSet<>();
+		
+		for (SQLTable t : buildables) {
+			
+		}
+	}
 	
 	
 	/*
@@ -129,7 +148,8 @@ public class ObjectMapper {
 	//END UPDATE DB METHOD
 	
 	/* to SQL obj */
-	public static SQLTable toTable(Class<?> c) throws Exception {
+	public static SQLTable toTable(Class<?> c) throws Exception 
+	{
 		/*
 		 * Use *reflection* to get the annotations and names of all
 		 * relevat values in a java class passed by the user 
@@ -144,9 +164,10 @@ public class ObjectMapper {
 			//maybe throw "notMappable"
 			return null;
 		}
+		System.out.println("Moving to mapping columns: \n");
 		
 		//Create new SQL table
-		SQLTable table = new SQLTable(c.getName());
+		SQLTable table = new SQLTable(c.getAnnotation(Table.class).name());
 		
 		//Get all fields
 		Field[] fields = c.getDeclaredFields();
@@ -158,7 +179,8 @@ public class ObjectMapper {
 			}
 		}
 		//End For
-
+		System.out.println("About to return table with values: \n" + table.toString());
+		
 		return table;
 	}
 	//END ObjectMapper::TOTABLE
@@ -247,8 +269,8 @@ public class ObjectMapper {
 			//Finish up
 			val.append(",\n");
 			query.append(val);
-			System.out.println("Our value: " + val);			
-			System.out.println("Our query: " + query + "\n");
+			//System.out.println("Our value: " + val);			
+			//System.out.println("Our query: " + query + "\n");
 			
 		}
 		//End value building FOR

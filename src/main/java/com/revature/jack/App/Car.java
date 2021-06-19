@@ -10,19 +10,22 @@ import java.util.Date;
  * 		reflection in java and our ORM
  */
 
-@Table(name="CarTest")
+@Table(name="Cars")
 public class Car {
 	
 	@PrimaryKey
 	@Column(name="model")
 	private String model;
 	
+	@NotNull
+	@Unique
 	@Column(name="year")
 	private int year;
 	
 	@Column(name="valves")
 	private Integer valves;
 	
+	@CheckColumn(checkStmt="miles>=0")
 	@Column(name="miles")
 	private float miles;
 	
