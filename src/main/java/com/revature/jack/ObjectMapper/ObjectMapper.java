@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import javax.sql.DataSource;
@@ -119,14 +120,52 @@ public class ObjectMapper {
 	private static Collection<SQLTable> orderTablesByFK() throws Exception //Throws ForeignKeyException 
 	{
 		Collection<SQLTable> buildables = tables.values();
-		List<SQLTable> sorted = new LinkedList<>();
-		Map<Class<?>, Iterator<SQLTable>> map = new HashMap<>();
+		Queue<SQLTable> queue = new LinkedList<>();
 		
 		//Alternative, set, queue implementation
 		Set<SQLTable> ordered = new HashSet<>();
 		
+		//Add all values to set and queue initially
 		for (SQLTable t : buildables) {
-			
+			orderTablesHelper(t, queue, ordered);
+		}
+		
+		int limit = queue.size() + 1;	//After n^2 iterations, there must be a circular dependency
+										//in our relationships and we will exit
+		while(!queue.isEmpty() && limit > 0) {
+			SQLTable t = queue.poll();
+			orderTablesHelper(t, queue, ordered);
+		}
+		
+		//Throw exception if queue isnt empty - should be ForeignKey exception...
+		if(!queue.isEmpty()) {
+			throw new Exception();
+		}
+		
+		return ordered;
+	}
+	
+	/*
+	 * Helper method will determine if next table up should be added to the 
+	 * set (can be added safely) or 
+	 */
+	
+	private static void orderTablesHelper(SQLTable t, Queue<SQLTable> queue, Set<SQLTable> ordered) 
+	{
+		List<Class<?>> refs = t.getReferences();
+		boolean canAdd = true;
+		for (Class<?> c : refs) {
+			if(!ordered.contains(tables.get(c))) {
+				canAdd = false;
+				break;
+			}
+		}
+		
+		//We can add table if all REFERENCED tables have already been added
+		if(canAdd) {
+			ordered.add(t);
+		} else {
+			queue.add(t);
 		}
 	}
 	
