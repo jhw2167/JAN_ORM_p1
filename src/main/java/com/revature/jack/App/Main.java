@@ -26,6 +26,9 @@ public class Main {
 		try {
 			ObjectMapper.buildDBFromModel();
 		} catch (SQLException e) {
+			System.out.println("SQLException caught building db: " + e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
 			System.out.println("Exception caught building db: " + e.getMessage());
 			e.printStackTrace();
 		}
