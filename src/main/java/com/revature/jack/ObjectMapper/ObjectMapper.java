@@ -106,7 +106,7 @@ public class ObjectMapper {
 	 * 	This operation WILL drop all data and tables in the EXISTING DB, so do not
 	 *  use it unless you want to start fresh
 	 */
-	public static void buildDBFromModel() throws SQLException {
+	public static void buildDBFromModel() throws Exception {
 		Collection<SQLTable> buildables = orderTablesByFK();
 		for (SQLTable t : buildables) {
 			createTable(t);
