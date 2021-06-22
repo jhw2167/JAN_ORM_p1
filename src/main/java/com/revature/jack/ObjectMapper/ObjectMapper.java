@@ -35,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import com.revature.jack.Annotations.*;
 import com.revature.jack.utils.Pair;
 import com.revature.aron.connection.*;
+import com.revature.aron.exceptions.ForeignKeyException;
+import com.revature.aron.exceptions.NotMappableException;
 
 /*
  *  	Simple java object mapper class to TAKE IN an object of type class
@@ -117,7 +119,7 @@ public class ObjectMapper {
 	/*
 	 * We need to order the tables correctly so that Foreign keys 
 	 */
-	private static Collection<SQLTable> orderTablesByFK() throws Exception //Throws ForeignKeyException 
+	private static Collection<SQLTable> orderTablesByFK() throws ForeignKeyException 
 	{
 		Collection<SQLTable> buildables = tables.values();
 		Queue<SQLTable> queue = new LinkedList<>();
@@ -139,7 +141,7 @@ public class ObjectMapper {
 		
 		//Throw exception if queue isnt empty - should be ForeignKey exception...
 		if(!queue.isEmpty()) {
-			throw new Exception();
+			throw new ForeignKeyException();
 		}
 		
 		return ordered;
@@ -199,6 +201,7 @@ public class ObjectMapper {
 		if(!c.isAnnotationPresent(Table.class)) {
 			System.out.println("Class not mappable: please annotate " + 
 		"classes with @Table and fields with @Column");
+			throw new NotMappableException();
 			
 			//maybe throw "notMappable"
 			return null;
