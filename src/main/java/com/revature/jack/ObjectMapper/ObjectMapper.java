@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 //Project Imports
 import com.revature.jack.Annotations.*;
+import com.revature.aron.exceptions.*;
 import com.revature.jack.utils.Pair;
 import com.revature.aron.connection.*;
 import com.revature.aron.exceptions.ForeignKeyException;
@@ -189,7 +190,7 @@ public class ObjectMapper {
 	//END UPDATE DB METHOD
 	
 	/* to SQL obj */
-	public static SQLTable toTable(Class<?> c) throws Exception 
+	public static SQLTable toTable(Class<?> c) throws NotMappableException, Exception 
 	{
 		/*
 		 * Use *reflection* to get the annotations and names of all
@@ -202,9 +203,6 @@ public class ObjectMapper {
 			System.out.println("Class not mappable: please annotate " + 
 		"classes with @Table and fields with @Column");
 			throw new NotMappableException();
-			
-			//maybe throw "notMappable"
-			return null;
 		}
 		System.out.println("Moving to mapping columns: \n");
 		
