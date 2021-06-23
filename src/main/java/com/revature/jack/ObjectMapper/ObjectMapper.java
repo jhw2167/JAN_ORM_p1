@@ -71,6 +71,17 @@ public class ObjectMapper {
 		//not instatiated
 	}
 	
+	//Getter
+	
+	public static Map<Class<?>, SQLTable> getTables() {
+		return tables;
+	}
+	
+	public static DataSource getDs() {
+		return ds;
+	}
+	
+	
 	/* MANAGING OUR MODEL */
 	
 	/* ObjectMapper ADD method */
@@ -79,7 +90,7 @@ public class ObjectMapper {
 	}
 	//END ADD METHOD
 	
-	
+
 	/* ObjectMapper Remove From Model method 
 	 * 	- Should be used if you add a class to the model on accident
 	 * 
@@ -236,7 +247,7 @@ public class ObjectMapper {
 		}
 		query += ";";
 		
-		//Set and executre our prepared statement
+		//Set and execute our prepared statement
 		Connection conn = ds.getConnection();
 		PreparedStatement pstmt = conn.prepareStatement(query);
 		return pstmt.execute();
@@ -251,7 +262,7 @@ public class ObjectMapper {
 	 * 		- terminate query with );
 	 * 		- set in prepared stmt and execute
 	 */
-	private static boolean createTable(SQLTable table) throws SQLException 
+	static boolean createTable(SQLTable table) throws SQLException 
 	{	
 		//Drop table if exists
 		dropTable(table, true);
