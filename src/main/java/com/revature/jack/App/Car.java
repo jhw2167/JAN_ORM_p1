@@ -9,26 +9,30 @@ import java.util.Date;
  * 		reflection in java and our ORM
  */
 
-@Table(name = "Cars")
+@Table(name = "cars")
 public class Car {
 
+	@Column
 	@PrimaryKey
-	@Column(name = "model")
+	private int id;
+	
+	@Column
+	@ForeignKey(refColumn = "brandName", refClass = Brand.class)
 	private String model;
 
 	@NotNull
 	@Unique
-	@Column(name = "year")
+	@Column
 	private int year;
 
-	@Column(name = "valves")
+	@Column
 	private Integer valves;
 
 	@CheckColumn(checkStmt = "miles>=0")
-	@Column(name = "miles")
+	@Column
 	private float miles;
 
-	@Column(name = "purchaseDate")
+	@Column
 	private Date purchaseDate;
 
 	// we dont want this in our db
@@ -36,8 +40,9 @@ public class Car {
 
 	/* Declare Methods */
 	
-	public Car(String model, int year, Integer valves, float miles, Date purchaseDate) {
+	public Car(int id, String model, int year, Integer valves, float miles, Date purchaseDate) {
 		super();
+		this.id = id;
 		this.model = model;
 		this.year = year;
 		this.valves = valves;

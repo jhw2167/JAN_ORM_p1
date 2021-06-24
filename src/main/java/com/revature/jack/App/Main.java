@@ -34,11 +34,21 @@ public class Main {
 //			System.out.println("Exception caught building db: " + e.getMessage());
 //			e.printStackTrace();
 //		}
+		
+		//Create table for brands
+		
+		//Create table for brands
+		ObjectQuery.createTableFromClass(Brand.class);
+		Brand bmw = new Brand("BMW", 1916, "Germany");
+		Brand ford = new Brand("Ford", 1903, "USA");
+		Brand honda = new Brand("Honda", 1958, "Japan");
+		Brand toyota = new Brand("Toyota", 1937, "Japan");
+		
 		// Create Table from Class
 		ObjectQuery.createTableFromClass(Car.class);
-		Car newCar = new Car("Ford", 2021, 4, 0.0f, new Date(System.currentTimeMillis()));
-		Car newCar2 = new Car("BMW", 2020, 5, 0.0f, new Date(System.currentTimeMillis()));
-		Car oldCar = new Car("Honda", 2001, 2, 101200.12f, new Date(1000000000000L));
+		Car newCar = new Car(4, "Ford", 2021, 4, 0.0f, new Date(System.currentTimeMillis()));
+		Car newCar2 = new Car(5, "BMW", 2020, 5, 0.0f, new Date(System.currentTimeMillis()));
+		Car oldCar = new Car(1, "Honda", 2001, 2, 101200.12f, new Date(1000000000000L));
 		List<Car> cars = new ArrayList<>();
 		ObjectQuery.addObjectToTable(newCar);
 		ObjectQuery.addObjectToTable(newCar2);

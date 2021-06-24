@@ -13,6 +13,6 @@ import com.revature.jack.ObjectMapper.SQLTable;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ForeignKey {
-	public Class<?> refTable();
+	public Class<?> refClass();
 	public String refColumn();
 }
