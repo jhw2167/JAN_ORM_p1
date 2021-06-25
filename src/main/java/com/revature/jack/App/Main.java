@@ -56,22 +56,22 @@ public class Main {
 		ObjectQuery.addObjectToTable(oldCar);
 		// QUERY for FORD
 		System.out.println("Model is Ford:");
-		List<?> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");
+		List<Object> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");
 		fordQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 		// QUERY FOR YEAR 2021
 		System.out.println("Year is 2021:");
-		List<?> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
+		List<Object> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
 		yearQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 		// QUERY FOR MILES LESS THAN 10
 		System.out.println("Miles Less than 10:");
-		List<?> milesQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
+		List<Object> milesQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
 		milesQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 		// QUERY FOR MILES GREATER THAN 10
 		System.out.println("Miles Greater than 10:");
-		List<?> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
+		List<Object> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
 		milesgreaterQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 
