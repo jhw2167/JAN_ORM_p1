@@ -1,6 +1,8 @@
 package com.revature.jack.ObjectMapper;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,12 +68,19 @@ public class ObjectQuery {
 	// NOT FULLY IMPLEMENTED YET
 	public static List<?> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) {
 		tables = ObjectMapper.getTables();
-		Optional<?> calledClass = tables.entrySet().stream()
+		Class<?> calledClass = tables.entrySet().stream()
 				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey)
-				.findFirst();
-		//table = tables.get(calledClass.getClass());
-		Object obj = calledClass.get();
-		System.out.println(obj.toString());
+				.findFirst().get();
+		Object obj = null;
+		try {
+			Constructor<?> c = calledClass.getDeclaredConstructor();
+			c.setAccessible(true);
+			obj = calledClass.getDeclaredConstructor().newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		StringBuilder query = new StringBuilder(
@@ -87,10 +96,9 @@ public class ObjectQuery {
 				for (int i = 1; i <= columnCount; i++) {
 					args.add(rs.getObject(i));
 					colNames.add(md.getColumnName(i));
-					System.out.println(args.toString());
-					System.out.println(colNames);
 				}
-
+				System.out.println(args.toString());
+				System.out.println(colNames);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

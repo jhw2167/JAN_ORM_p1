@@ -53,7 +53,7 @@ public class Car {
 		this.purchaseDate = purchaseDate;
 	}
 	@NoArgsContructor
-	Car() {
+	public Car() {
 		super();
 	}
 	// END CONSTRUCTOR
