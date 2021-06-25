@@ -46,29 +46,34 @@ public class Main {
 
 		// Create Table from Class
 		ObjectQuery.createTableFromClass(Car.class);
-		Car newCar = new Car(4, "Ford", 2021, 4, 0.0f, new Date(System.currentTimeMillis()));
-		Car newCar2 = new Car(5, "BMW", 2020, 5, 0.0f, new Date(System.currentTimeMillis()));
-		Car oldCar = new Car(1, "Honda", 2001, 2, 101200.12f, new Date(1000000000000L));
+		Car newCar = new Car(4, "Ford", 2021, 4, 0.0f);
+		Car newCar2 = new Car(5, "BMW", 2020, 5, 0.0f);
+		Car oldCar = new Car(1, "Honda", 2001, 2, 101200.12f);
 		List<Car> cars = new ArrayList<>();
 
 		ObjectQuery.addObjectToTable(newCar);
 		ObjectQuery.addObjectToTable(newCar2);
 		ObjectQuery.addObjectToTable(oldCar);
-
-		try {
-			List<?> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");
-			fordQuery.forEach(a -> System.out.println(a));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			List<?> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
-			yearQuery.forEach(a -> System.out.println(a));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// QUERY for FORD
+		System.out.println("Model is Ford:");
+		List<?> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");
+		fordQuery.forEach(a -> System.out.println(a));
+		System.out.println();
+		// QUERY FOR YEAR 2021
+		System.out.println("Year is 2021:");
+		List<?> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
+		yearQuery.forEach(a -> System.out.println(a));
+		System.out.println();
+		// QUERY FOR MILES LESS THAN 10
+		System.out.println("Miles Less than 10:");
+		List<?> milesQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
+		milesQuery.forEach(a -> System.out.println(a));
+		System.out.println();
+		// QUERY FOR MILES GREATER THAN 10
+		System.out.println("Miles Greater than 10:");
+		List<?> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
+		milesgreaterQuery.forEach(a -> System.out.println(a));
+		System.out.println();
 
 	}
 

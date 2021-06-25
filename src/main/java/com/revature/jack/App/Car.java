@@ -31,26 +31,23 @@ public class Car {
 	@Column
 	private Integer valves;
 
-//	@CheckColumn(checkStmt = "miles>=0")
-//	@Column
-//	private float miles;
+	@CheckColumn(checkStmt = "miles>=0")
+	@Column
+	private float miles;
 
-	//@Column
-	//private Date purchaseDate;
 
 	// we dont want this in our db
 	private int qID;
 
 	/* Declare Methods */
 	
-	public Car(int id, String model, int year, Integer valves, float miles, Date purchaseDate) {
+	public Car(int id, String model, int year, Integer valves, float miles) {
 		super();
 		this.id = id;
 		this.model = model;
 		this.year = year;
 		this.valves = valves;
-		//this.miles = miles;
-		//this.purchaseDate = purchaseDate;
+		this.miles = miles;
 	}
 	public Car() {
 		super();
@@ -80,18 +77,12 @@ public class Car {
 	public void setValves(Integer valves) {
 		this.valves = valves;
 	}
-//	public float getMiles() {
-//		return miles;
-//	}
-//	public void setMiles(float miles) {
-//		this.miles = miles;
-//	}
-//	public Date getPurchaseDate() {
-//		return purchaseDate;
-//	}
-//	public void setPurchaseDate(Date purchaseDate) {
-//		this.purchaseDate = purchaseDate;
-//	}
+	public float getMiles() {
+		return miles;
+	}
+	public void setMiles(float miles) {
+		this.miles = miles;
+	}
 	public int getqID() {
 		return qID;
 	}
@@ -100,8 +91,10 @@ public class Car {
 	}
 	@Override
 	public String toString() {
-		return "Car [id=" + id + ", model=" + model + ", year=" + year + ", valves=" + valves + "]";
+		return "Car [id=" + id + ", model=" + model + ", year=" + year + ", valves=" + valves + ", miles=" + miles
+				+ ", qID=" + qID + "]";
 	}
+
 	
 	/* GETTERS AND SETTERS */
 	
