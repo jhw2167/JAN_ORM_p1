@@ -38,6 +38,7 @@ import com.revature.jack.utils.Pair;
 import com.revature.aron.connection.*;
 import com.revature.aron.exceptions.ForeignKeyException;
 import com.revature.aron.exceptions.NotMappableException;
+import com.revature.nate.errors.ErrorCheck;
 
 /*
  *  	Simple java object mapper class to TAKE IN an object of type class
@@ -208,7 +209,6 @@ public class ObjectMapper {
 		 * relevat values in a java class passed by the user 
 		 */
 		
-		//WE NEED TO THROW SOME EXCEPTION ON ERRORS
 		
 		if(!c.isAnnotationPresent(Table.class)) {
 			System.out.println("Class not mappable: please annotate " + 
@@ -219,13 +219,14 @@ public class ObjectMapper {
 		
 		//Create new SQL table
 		SQLTable table = new SQLTable(c.getAnnotation(Table.class).name());
+		ErrorCheck.keywordCheck(table.getTableName());
 		
 		//Get all fields
 		Field[] fields = c.getDeclaredFields();
 		
 		//parse through and get variables
 		for (Field f : fields) {
-			if(f.isAnnotationPresent(Column.class)) {
+			if(f.isAnnotationPresent(Column.class) && ErrorCheck.keywordCheck(f.getName())==false) {
 				table.addCol(new SQLColumn(f));
 			}
 		}
