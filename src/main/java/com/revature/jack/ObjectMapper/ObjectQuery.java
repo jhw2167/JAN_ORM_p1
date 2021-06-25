@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -52,8 +53,7 @@ public class ObjectQuery {
 
 		System.out.println(query.toString());
 
-		try {
-			Connection conn = ds.getConnection();
+		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query.toString());
 			pstmt.execute();
 		} catch (SQLException e) {
@@ -62,32 +62,42 @@ public class ObjectQuery {
 		}
 
 	}
+
 	// NOT FULLY IMPLEMENTED YET
-	public static List<Object> returnObjectsWhereColumnIs(Object obj, String ColumnName, String Value) {
+	public static List<?> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) {
 		tables = ObjectMapper.getTables();
-		table = tables.get(obj.getClass());
+		Optional<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey)
+				.findFirst();
+		//table = tables.get(calledClass.getClass());
+		Object obj = calledClass.get();
+		System.out.println(obj.toString());
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
-		StringBuilder query = new StringBuilder("SELECT * FROM " + table.getTableName() + " WHERE UPPER(" + ColumnName + ") = UPPER('" + Value +"');");
-		try {
-			Connection conn = ds.getConnection();
+		StringBuilder query = new StringBuilder(
+				"SELECT * FROM " + tableName + " WHERE UPPER(" + ColumnName + ") = UPPER('" + Value + "');");
+		try (Connection conn = ds.getConnection()) {
 			pstmt = conn.prepareStatement(query.toString());
 			ResultSet rs = pstmt.executeQuery();
 			ResultSetMetaData md = rs.getMetaData();
 			int columnCount = md.getColumnCount();
 			List<Object> args = new ArrayList<>();
-			while(rs.next()) {
-				for(int i = 1; i<=columnCount; i++) {
+			List<Object> colNames = new ArrayList<>();
+			while (rs.next()) {
+				for (int i = 1; i <= columnCount; i++) {
 					args.add(rs.getObject(i));
+					colNames.add(md.getColumnName(i));
+					System.out.println(args.toString());
+					System.out.println(colNames);
 				}
-				
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
-		
+
 	}
 
 }

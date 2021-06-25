@@ -2,6 +2,9 @@ package com.revature.jack.App;
 
 //IMPORTS
 import com.revature.jack.Annotations.*;
+import com.revature.nate.annotations.NoArgsContructor;
+import com.revature.nate.annotations.Setter;
+
 import java.util.Date;
 
 /*
@@ -17,7 +20,7 @@ public class Car {
 	private int id;
 	
 	@Column
-	@ForeignKey(refColumn = "brandName", refClass = Brand.class)
+	// @ForeignKey(refColumn = "brandName", refClass = Brand.class)
 	private String model;
 
 	@NotNull
@@ -49,10 +52,45 @@ public class Car {
 		this.miles = miles;
 		this.purchaseDate = purchaseDate;
 	}
-	
+	@NoArgsContructor
 	Car() {
 		super();
 	}
 	// END CONSTRUCTOR
+	
+	/* SETTERS */
+	@Setter(name = "id")
+	public void setId(int id) {
+		this.id = id;
+	}
+	@Setter(name = "model")
+	public void setModel(String model) {
+		this.model = model;
+	}
+	@Setter(name = "year")
+	public void setYear(int year) {
+		this.year = year;
+	}
+	@Setter(name = "valves")
+	public void setValves(Integer valves) {
+		this.valves = valves;
+	}
+	@Setter(name = "miles")
+	public void setMiles(float miles) {
+		this.miles = miles;
+	}
+	@Setter(name = "purchaseDate")
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+	@Setter(name = "qID")
+	public void setqID(int qID) {
+		this.qID = qID;
+	}
+	
+	
+	
+	
+	
 
 }
