@@ -57,6 +57,14 @@ public class Main {
 
 		try {
 			List<?> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");
+			fordQuery.forEach(a -> System.out.println(a));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			List<?> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
+			yearQuery.forEach(a -> System.out.println(a));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

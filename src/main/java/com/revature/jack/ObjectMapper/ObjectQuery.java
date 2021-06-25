@@ -3,6 +3,7 @@ package com.revature.jack.ObjectMapper;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -65,46 +66,81 @@ public class ObjectQuery {
 
 	}
 
-	// NOT FULLY IMPLEMENTED YET
-	public static List<?> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) {
+	public static List<Object> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) {
 		tables = ObjectMapper.getTables();
+		List<Object> objListtoReturn = new ArrayList<>();
 		Class<?> calledClass = tables.entrySet().stream()
 				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey)
 				.findFirst().get();
-		Object obj = null;
-		try {
-			Constructor<?> c = calledClass.getDeclaredConstructor();
-			c.setAccessible(true);
-			obj = calledClass.getDeclaredConstructor().newInstance();
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		StringBuilder query = new StringBuilder(
-				"SELECT * FROM " + tableName + " WHERE UPPER(" + ColumnName + ") = UPPER('" + Value + "');");
+				"SELECT * FROM " + tableName + " WHERE " + ColumnName + " = '" + Value + "';");
 		try (Connection conn = ds.getConnection()) {
 			pstmt = conn.prepareStatement(query.toString());
 			ResultSet rs = pstmt.executeQuery();
 			ResultSetMetaData md = rs.getMetaData();
 			int columnCount = md.getColumnCount();
-			List<Object> args = new ArrayList<>();
-			List<Object> colNames = new ArrayList<>();
+			ObjectGetterAndSetter ogas = new ObjectGetterAndSetter();
 			while (rs.next()) {
-				for (int i = 1; i <= columnCount; i++) {
-					args.add(rs.getObject(i));
-					colNames.add(md.getColumnName(i));
+				Object objToReturn = null;
+				try {
+					Constructor<?> c = calledClass.getDeclaredConstructor();
+					c.setAccessible(true);
+					objToReturn = calledClass.getDeclaredConstructor().newInstance();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException e1) {
+					e1.printStackTrace();
 				}
-				System.out.println(args.toString());
-				System.out.println(colNames);
+				for (int i = 1; i <= columnCount; i++) {
+					ogas.invokeSetter(objToReturn, md.getColumnName(i), rs.getObject(i));
+				}
+				objListtoReturn.add(objToReturn);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return objListtoReturn;
+
+	}
+	
+	public static List<Object> returnObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) {
+		tables = ObjectMapper.getTables();
+		List<Object> objListtoReturn = new ArrayList<>();
+		Class<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey)
+				.findFirst().get();
+		PreparedStatement pstmt;
+		DataSource ds = ObjectMapper.getDs();
+		StringBuilder query = new StringBuilder(
+				"SELECT * FROM " + tableName + " WHERE " + ColumnName + " < '" + Value + "';");
+		try (Connection conn = ds.getConnection()) {
+			pstmt = conn.prepareStatement(query.toString());
+			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData md = rs.getMetaData();
+			int columnCount = md.getColumnCount();
+			ObjectGetterAndSetter ogas = new ObjectGetterAndSetter();
+			while (rs.next()) {
+				Object objToReturn = null;
+				try {
+					Constructor<?> c = calledClass.getDeclaredConstructor();
+					c.setAccessible(true);
+					objToReturn = calledClass.getDeclaredConstructor().newInstance();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+						| NoSuchMethodException | SecurityException e1) {
+					e1.printStackTrace();
+				}
+				for (int i = 1; i <= columnCount; i++) {
+					ogas.invokeSetter(objToReturn, md.getColumnName(i), rs.getObject(i));
+				}
+				objListtoReturn.add(objToReturn);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return objListtoReturn;
 
 	}
 

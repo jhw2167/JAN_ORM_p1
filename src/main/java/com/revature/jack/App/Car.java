@@ -31,12 +31,12 @@ public class Car {
 	@Column
 	private Integer valves;
 
-	@CheckColumn(checkStmt = "miles>=0")
-	@Column
-	private float miles;
+//	@CheckColumn(checkStmt = "miles>=0")
+//	@Column
+//	private float miles;
 
-	@Column
-	private Date purchaseDate;
+	//@Column
+	//private Date purchaseDate;
 
 	// we dont want this in our db
 	private int qID;
@@ -49,44 +49,61 @@ public class Car {
 		this.model = model;
 		this.year = year;
 		this.valves = valves;
-		this.miles = miles;
-		this.purchaseDate = purchaseDate;
+		//this.miles = miles;
+		//this.purchaseDate = purchaseDate;
 	}
-	@NoArgsContructor
 	public Car() {
 		super();
 	}
 	// END CONSTRUCTOR
-	
-	/* SETTERS */
-	@Setter(name = "id")
+	public int getId() {
+		return id;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	@Setter(name = "model")
+	public String getModel() {
+		return model;
+	}
 	public void setModel(String model) {
 		this.model = model;
 	}
-	@Setter(name = "year")
+	public int getYear() {
+		return year;
+	}
 	public void setYear(int year) {
 		this.year = year;
 	}
-	@Setter(name = "valves")
+	public Integer getValves() {
+		return valves;
+	}
 	public void setValves(Integer valves) {
 		this.valves = valves;
 	}
-	@Setter(name = "miles")
-	public void setMiles(float miles) {
-		this.miles = miles;
+//	public float getMiles() {
+//		return miles;
+//	}
+//	public void setMiles(float miles) {
+//		this.miles = miles;
+//	}
+//	public Date getPurchaseDate() {
+//		return purchaseDate;
+//	}
+//	public void setPurchaseDate(Date purchaseDate) {
+//		this.purchaseDate = purchaseDate;
+//	}
+	public int getqID() {
+		return qID;
 	}
-	@Setter(name = "purchaseDate")
-	public void setPurchaseDate(Date purchaseDate) {
-		this.purchaseDate = purchaseDate;
-	}
-	@Setter(name = "qID")
 	public void setqID(int qID) {
 		this.qID = qID;
 	}
+	@Override
+	public String toString() {
+		return "Car [id=" + id + ", model=" + model + ", year=" + year + ", valves=" + valves + "]";
+	}
+	
+	/* GETTERS AND SETTERS */
 	
 	
 	
