@@ -3,9 +3,8 @@
 ## JAN ORM Description
 JAN ORM is a java based lightweight Object Relational Mapper used for connection to a PostGreSQL Databse without the need for SQL or Connection Management. 
 
-Authors: Jack Welsh, Aron Jang, Nate Opsal.
-
-Date Last Updated: 6/26/21
+**Authors:** *Jack Welsh, Aron Jang, Nate Opsal*<br/>
+**Date Last Updated:** *6/26/21*
 
 ## TechStack
 * Java - _version 8.0_
@@ -64,8 +63,8 @@ For a class to be persisted to the database, it must be annoted using the follow
 Annotation | Purpose
 -----------|--------
 @Table(name = "table_name") | Indicates to the ORM that this class is associated with table 'table_name'
-@Column() | Indicates to the ORM that this field is a column in the table.<p>The column name is automatically the field name.
-@PrimaryKey | Indicates to the ORM that this field is a Prmary key <p>Each class can only have one primary key.
+@Column() | Indicates to the ORM that this field is a column in the table.<br/>The column name is automatically the field name.
+@PrimaryKey | Indicates to the ORM that this field is a Prmary key <br/>Each class can only have one primary key.
 @ForeignKey(refColumn = "ref_field", refClass = "ref_class") | Indicates to the ORM that this field is a Foreign Key that references class 'ref_class' and its field 'ref_field'
 @CheckColumn(checkStmt = "check_statement") | Indicates to the ORM that this field is must undergo the "check_statement" before the record can be added to the table
 @NotNull() | Indicates to the ORM that this field cannot be null
