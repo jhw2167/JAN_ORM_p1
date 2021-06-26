@@ -68,39 +68,39 @@ Ensure that you have created this file in **src/main/resource/** and have the fo
 For a class to be persisted to the database, it must be annoted using the following annotations:
 Annotation | Purpose
 -----------|--------
-@Table(name = "table_name") | Indicates to the ORM that this class is associated with table 'table_name'
-@Column() | Indicates to the ORM that this field is a column in the table.<br/>The column name is automatically the field name.
-@PrimaryKey | Indicates to the ORM that this field is a Prmary key <br/>Each class can only have one primary key.
-@ForeignKey(refColumn = "ref_field", refClass = "ref_class") | Indicates to the ORM that this field is a Foreign Key that references class 'ref_class' and its field 'ref_field'
-@CheckColumn(checkStmt = "check_statement") | Indicates to the ORM that this field is must undergo the "check_statement" before the record can be added to the table
-@NotNull() | Indicates to the ORM that this field cannot be null
-@DefaultValue(defaultValue = "default_value") | Indicates to the ORM that if no value is given for this field, then the default value will populate the field
-@Unique() | Indicates to the ORM that this field has to be unique and cannot contain multiples of the same value in the table
+```@Table(name = "table_name")``` | Indicates to the ORM that this class is associated with table 'table_name'
+```@Column()``` | Indicates to the ORM that this field is a column in the table.<br/>The column name is automatically the field name.
+```@PrimaryKey``` | Indicates to the ORM that this field is a Prmary key <br/>Each class can only have one primary key.
+```@ForeignKey(refColumn = "ref_field", refClass = "ref_class")``` | Indicates to the ORM that this field is a Foreign Key that references class 'ref_class' and its field 'ref_field'
+```@CheckColumn(checkStmt = "check_statement")``` | Indicates to the ORM that this field is must undergo the "check_statement" before the record can be added to the table
+```@NotNull()``` | Indicates to the ORM that this field cannot be null
+```@DefaultValue(defaultValue = "default_value")``` | Indicates to the ORM that if no value is given for this field, then the default value will populate the field
+```@Unique()``` | Indicates to the ORM that this field has to be unique and cannot contain multiples of the same value in the table
 
 ### User API
 #### ObjectMapper Class
 *Used to Create Tables from Classes*
 ObjectMapper Class Method | Purpose
 -----------|--------
-public static void  addToModel(Class<?> c) | Adds the annotated class to the a local model of classes
-public static boolean removeFromModel(Class<?> c) | Removes the annotated class from the local model of classes
-public static boolean removeFromDB(Class<?> c, boolean cascadeDelete) | Removes the annotated class from the local model of classes and from the database
-public static void buildDBFromModel() | Creates tables in the database from the local model of classes
+```public static void  addToModel(Class<?> c)``` | Adds the annotated class to the a local model of classes
+```public static boolean removeFromModel(Class<?> c)``` | Removes the annotated class from the local model of classes
+```public static boolean removeFromDB(Class<?> c, boolean cascadeDelete)``` | Removes the annotated class from the local model of classes and from the database
+```public static void buildDBFromModel()``` | Creates tables in the database from the local model of classes
 
 
 #### ObjectQuery Class
 *Used to query the database*
 ObjectQuery Class Method | Purpose
 -----------|--------
-public static void addObjectToTable(Object obj) | Adds the object to the database table.<br/> *Must use the ObjectMapper Methods first to create the table before adding Object to Database*
-public static List<Object> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value;*
-public static List<Object> returnObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName < Value;*
-public static List<Object> returnObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName > Value;*
-public static List<Object> returnObjectsWhere2ColumnsAre(String tableName, String ColumnName, String Value, String ColumnName2, String Value2) |  Returns a List of Objects where two condition are met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value AND ColumnName2 = Value2;*
-public static List<Object> returnObjectsWhereColumnsAre(String tableName, String[] ColumnNames, String[] Operands, String[] Values) |*Query: SELECT * FROM tableName WHERE ColumnName[0] Operand[0] Value[0] AND ColumnName[1] Operand[1] Value[1] AND ... ColumnName[n] Operand[n] Value[n];* 
-public static int returnCountOfObjectsWhereColumnIs(String tableName, String ColumnName, String Value) | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;*
-public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
-public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value) | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
+```public static void addObjectToTable(Object obj)``` | Adds the object to the database table.<br/> *Must use the ObjectMapper Methods first to create the table before adding Object to Database*
+```public static List<Object> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value;*
+```public static List<Object> returnObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName < Value;*
+```public static List<Object> returnObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName > Value;*
+```public static List<Object> returnObjectsWhere2ColumnsAre(String tableName, String ColumnName, String Value, String ColumnName2, String Value2)``` |  Returns a List of Objects where two condition are met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value AND ColumnName2 = Value2;*
+```public static List<Object> returnObjectsWhereColumnsAre(String tableName, String[] ColumnNames, String[] Operands, String[] Values)``` |*Query: SELECT * FROM tableName WHERE ColumnName[0] Operand[0] Value[0] AND ColumnName[1] Operand[1] Value[1] AND ... ColumnName[n] Operand[n] Value[n];* 
+```public static int returnCountOfObjectsWhereColumnIs(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;*
+```public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
+```public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
 
 #### ObjectCache Class
 *Used to query the Cache*
