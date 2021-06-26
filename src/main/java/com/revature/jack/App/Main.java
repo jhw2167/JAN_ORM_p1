@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.revature.aron.exceptions.InvalidOperandException;
 import com.revature.jack.ObjectMapper.ObjectQuery;
 
 public class Main {
@@ -61,7 +62,7 @@ public class Main {
 		System.out.println();
 		// QUERY FOR YEAR 2021
 		System.out.println("Year is 2021:");
-		List<Object> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "year", "2021");
+		List<Object> yearQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "Year", "2021");
 		yearQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 		// QUERY FOR MILES LESS THAN 10
@@ -74,7 +75,24 @@ public class Main {
 		List<Object> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsGreaterThan("cars", "miles", "10");
 		milesgreaterQuery.forEach(a -> System.out.println(a));
 		System.out.println();
-
+		//QUERY FOR FORD 2021
+		System.out.println("Model is Ford and Year is 2021:");
+		List<Object> ford2021Query = ObjectQuery.returnObjectsWhere2ColumnsAre("cars", "model", "Ford","year","2021");
+		milesgreaterQuery.forEach(a -> System.out.println(a));
+		System.out.println();
+		//QUERY FOR FORD newer than 2000 with Miles Not 10
+		System.out.println("Ford newer than 2000 with Miles not 10:");
+		String[] colNames = {"model","year","miles"};
+		String[] operands = {"=",">","<>"};
+		String[] values = {"Ford","2000","10"};
+		try {
+			List<Object> complexQueryEx = ObjectQuery.returnObjectsWhereColumnsAre("cars", colNames, operands, values);
+		} catch (InvalidOperandException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		milesgreaterQuery.forEach(a -> System.out.println(a));
+		System.out.println();
 	}
 
 }

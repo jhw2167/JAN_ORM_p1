@@ -3,7 +3,6 @@ package com.revature.jack.ObjectMapper;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.sql.DataSource;
+
+import com.revature.aron.exceptions.InvalidOperandException;
 
 public class ObjectQuery {
 	static Map<Class<?>, SQLTable> tables;
@@ -418,26 +418,25 @@ public class ObjectQuery {
 	/**
 	 * Returns the Objects that match Query of Database given below
 	 * <p>
-	 * Query: SELECT * FROM tableName WHERE ColumnName = Value AND ColumnName2 =
-	 * Value2;
+	 * Query: SELECT * FROM tableName WHERE ColumnName Operand Value AND ColumnName2
+	 * = Value2;
 	 * 
 	 * @param tableName   String of the TableName defined by the User using the
 	 *                    {@code @Table} Annotation
-	 * @param ColumnName  String of the field with {@code @Column} Annotation in
+	 * @param ColumnNames String[] of the fields with {@code @Column} Annotation in
 	 *                    corresponding Class
-	 * @param Value       String of the value that is found in the corresponding
+	 * @param Operands    String[] of Operands that denote <, =, >, <=, >=, or <>
+	 * @param Values      String[] of the value that is found in the corresponding
 	 *                    column
-	 * @param ColumnName2 String of the field with {@code @Column} Annotation in
-	 *                    corresponding Class
-	 * @param Value2      String of the value that is found in the corresponding
-	 *                    column
-	 * 
 	 * 
 	 * @return {@code List<Object>} List of Objects that Match the Query
+	 * @throws InvalidOperandException
 	 * 
 	 */
-	public static List<Object> returnObjectsWhereColumnsAre(String tableName, String[] ColumnName, String[] Value,
-			String[] Operand) {
+	public static List<Object> returnObjectsWhereColumnsAre(String tableName, String[] ColumnNames, String[] Operands,
+			String[] Values) throws InvalidOperandException {
+		// Checks operands before Proceeding
+		operandsCheck(Operands);
 		// Gets all tables in our Object Mapper
 		tables = ObjectMapper.getTables();
 		// Initializes a List of objects to return
@@ -449,11 +448,19 @@ public class ObjectQuery {
 		// Get the DataSource (Connection Pooling Object)
 		DataSource ds = ObjectMapper.getDs();
 		// Builds a Query
-		StringBuilder query = new StringBuilder("SELECT * FROM " + tableName + " WHERE " + ColumnName + " = '" + Value
-				+ "' AND " + ColumnName + " = '" + Value + "';");
+		StringBuilder query = new StringBuilder("SELECT * FROM " + tableName + " WHERE ");
+		for (int i = 0; i < ColumnNames.length; i++) {
+			query.append("'" + ColumnNames[i] + "'");
+			query.append(Operands[i]);
+			query.append("'" + Values[i] + "'");
+			query.append(" AND ");
+		}
+		query.delete(query.length() - 6, query.length() - 1);
+		query.append("';");
 		// Try with Resources (connection object) - closes connection automatically
 		try (Connection conn = ds.getConnection()) {
 			// Creates the Prepared Statement using Query
+			System.out.println(query.toString());
 			PreparedStatement pstmt = conn.prepareStatement(query.toString());
 			// Executes Query to get Result Set
 			ResultSet rs = pstmt.executeQuery();
@@ -501,6 +508,26 @@ public class ObjectQuery {
 		}
 		// Returns the List of Objects
 		return objListtoReturn;
+
+	}
+
+	/**
+	 * Ensures that all the operands are valid
+	 * <p>
+	 * Valid operands: {@code <||>||=||<=||>=||<>}
+	 * 
+	 * @param operands String[] of operands to check
+	 * @throws InvalidOperandException
+	 */
+	private static void operandsCheck(String[] operands) throws InvalidOperandException {
+		for (int i = 0; i < operands.length - 1; i++) {
+			if (operands[i].equals(">") || operands[i].equals("=") || operands[i].equals("<")
+					|| operands[i].equals("<=") || operands[i].equals(">=") || operands[i].equals("<>")) {
+
+			} else {
+				throw new InvalidOperandException();
+			}
+		}
 
 	}
 
