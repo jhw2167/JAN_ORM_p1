@@ -78,15 +78,21 @@ Annotation | Purpose
 @Unique() | Indicates to the ORM that this field has to be unique and cannot contain multiples of the same value in the table
 
 ### User API
+#### ObjectMapper Class
+*Used to Create Tables from Classes*
 ObjectMapper Class Method | Purpose
 -----------|--------
-
+public static void  addToModel(Class<?> c) | Adds the annotated class to the a local model of classes
+public static boolean removeFromModel(Class<?> c) | Removes the annotated class from the local model of classes
+public static boolean removeFromDB(Class<?> c, boolean cascadeDelete) | Removes the annotated class from the local model of classes and from the database
+public static void buildDBFromModel() | Creates tables in the database from the local model of classes
 
 
 #### ObjectQuery Class
+*Used to query the database*
 ObjectQuery Class Method | Purpose
 -----------|--------
-public static void addObjectToTable(Object obj) | Adds the object to the database table.<br/> **Must use the ObjectMapper Methods first to create the table before adding Object to Database**
+public static void addObjectToTable(Object obj) | Adds the object to the database table.<br/> *Must use the ObjectMapper Methods first to create the table before adding Object to Database*
 public static List<Object> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value;*
 public static List<Object> returnObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName < Value;*
 public static List<Object> returnObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value) | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName > Value;*
@@ -96,4 +102,12 @@ public static int returnCountOfObjectsWhereColumnIs(String tableName, String Col
 public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
 public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value) | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
 
+#### ObjectCache Class
+*Used to query the Cache*
+ObjectCache Class Method | Purpose
+-----------|--------
 
+#### DatabaseTransaction Class
+*Used to set Transactions the Database*
+ObjectCache Class Method | Purpose
+-----------|--------

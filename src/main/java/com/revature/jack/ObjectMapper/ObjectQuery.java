@@ -404,8 +404,7 @@ public class ObjectQuery {
 
 	/**
 	 * Returns the Objects that match Query of Database given below </br>
-	 * Query: SELECT * FROM tableName WHERE ColumnName Operand Value AND ColumnName2
-	 * = Value2;
+	 * Query: SELECT * FROM tableName WHERE ColumnName[0] Operand[0] Value[0] AND ColumnName[1] Operand[1] Value[1] AND ... ColumnName[n] Operand[n] Value[n];  
 	 * 
 	 * @param tableName   String of the TableName defined by the User using the
 	 *                    {@code @Table} Annotation
