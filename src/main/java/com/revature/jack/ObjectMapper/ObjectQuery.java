@@ -22,27 +22,16 @@ public class ObjectQuery {
 	static Map<Class<?>, SQLTable> tables;
 	static SQLTable table;
 
-	public static void createTableFromClass(Class<?> c) {
-		try {
-			ObjectMapper.addToModel(c);
-			tables = ObjectMapper.getTables();
-			ObjectMapper.createTable(tables.get(c));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 	/**
 	 * Adds object to a table on the Database. Only works if table has already been
-	 * created from the object.class.
-	 *
-	 * <p>
+	 * created from the object.class. </br>
 	 * Query: INSERT INTO Tablename (col1, col2...) VALUES (val1, val2...);
 	 * 
-	 * @param obj, Object to be added to table
-	 * 
+	 * @param obj Object to be added to table
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchFieldException
+	 * @throws SecurityException
 	 */
 	public static void addObjectToTable(Object obj)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -65,7 +54,7 @@ public class ObjectQuery {
 		query.deleteCharAt(query.length() - 1);
 		query.append(");");
 
-		System.out.println(query.toString());
+		//System.out.println(query.toString());
 
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query.toString());
@@ -243,8 +232,7 @@ public class ObjectQuery {
 
 	/**
 	 * Returns the Objects that match Query of Database given belowUsed to Query one
-	 * column.
-	 * <p>
+	 * column. </br>
 	 * Query: SELECT * FROM tableName WHERE ColumnName > Value;
 	 * 
 	 * @param tableName  String of the TableName defined by the User using the
@@ -327,8 +315,7 @@ public class ObjectQuery {
 
 	/**
 	 * Returns the Objects that match Query of Database given below. Used to Query
-	 * two columns.
-	 * <p>
+	 * two columns. </br>
 	 * Query: SELECT * FROM tableName WHERE ColumnName = Value AND ColumnName2 =
 	 * Value2;
 	 * 
@@ -416,8 +403,7 @@ public class ObjectQuery {
 	}
 
 	/**
-	 * Returns the Objects that match Query of Database given below
-	 * <p>
+	 * Returns the Objects that match Query of Database given below </br>
 	 * Query: SELECT * FROM tableName WHERE ColumnName Operand Value AND ColumnName2
 	 * = Value2;
 	 * 
@@ -450,8 +436,7 @@ public class ObjectQuery {
 		// Builds a Query
 		StringBuilder query = new StringBuilder("SELECT * FROM " + tableName + " WHERE ");
 		for (int i = 0; i < ColumnNames.length; i++) {
-			query.append("'" + ColumnNames[i] + "'");
-			query.append(Operands[i]);
+			query.append(ColumnNames[i] + Operands[i]);
 			query.append("'" + Values[i] + "'");
 			query.append(" AND ");
 		}
@@ -460,7 +445,7 @@ public class ObjectQuery {
 		// Try with Resources (connection object) - closes connection automatically
 		try (Connection conn = ds.getConnection()) {
 			// Creates the Prepared Statement using Query
-			System.out.println(query.toString());
+			//System.out.println(query.toString());
 			PreparedStatement pstmt = conn.prepareStatement(query.toString());
 			// Executes Query to get Result Set
 			ResultSet rs = pstmt.executeQuery();
@@ -512,8 +497,7 @@ public class ObjectQuery {
 	}
 
 	/**
-	 * Ensures that all the operands are valid
-	 * <p>
+	 * Ensures that all the operands are valid </br>
 	 * Valid operands: {@code <||>||=||<=||>=||<>}
 	 * 
 	 * @param operands String[] of operands to check
@@ -530,5 +514,139 @@ public class ObjectQuery {
 		}
 
 	}
+
+	/* AGGREGATE FUNCTIONS */
+	/**
+	 * Returns the {@code int} of Count that matches the Query of Database given
+	 * below </br>
+	 * Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;
+	 * 
+	 * @param tableName  String of the TableName defined by the User using the
+	 *                   {@code @Table} Annotation
+	 * @param ColumnName String of the field with {@code @Column} Annotation in
+	 *                   corresponding Class
+	 * @param Value      String of the value that is found in the corresponding
+	 *                   column
+	 * @return An int representing the count from the query
+	 */
+	public static int returnCountOfObjectsWhereColumnIs(String tableName, String ColumnName, String Value) {
+		// Gets all tables in our Object Mapper
+		tables = ObjectMapper.getTables();
+		// Initializes a Count to Return
+		int count = 0;
+		// Finds the class from the table name given
+		Class<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey).findFirst()
+				.get();
+		// Get the DataSource (Connection Pooling Object)
+		DataSource ds = ObjectMapper.getDs();
+		// Builds a Query
+		StringBuilder query = new StringBuilder(
+				"SELECT COUNT(" + ColumnName + ") FROM " + tableName + " WHERE " + ColumnName + " = '" + Value + "';");
+		// Try with Resources (connection object) - closes connection automatically
+		try (Connection conn = ds.getConnection()) {
+			// Creates the Prepared Statement using Query
+			PreparedStatement pstmt = conn.prepareStatement(query.toString());
+			// Executes Query to get Result Set
+			ResultSet rs = pstmt.executeQuery();
+			// While loop that iterates over every object returned from the Query
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Returns the List of Objects
+		return count;
+	}
+	
+	/**
+	 * Returns the {@code int} of Count that matches the Query of Database given
+	 * below </br>
+	 * Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName < Value;
+	 * 
+	 * @param tableName  String of the TableName defined by the User using the
+	 *                   {@code @Table} Annotation
+	 * @param ColumnName String of the field with {@code @Column} Annotation in
+	 *                   corresponding Class
+	 * @param Value      String of the value that is found in the corresponding
+	 *                   column
+	 * @return An int representing the count from the query
+	 */
+	public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value) {
+		// Gets all tables in our Object Mapper
+		tables = ObjectMapper.getTables();
+		// Initializes a Count to Return
+		int count = 0;
+		// Finds the class from the table name given
+		Class<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey).findFirst()
+				.get();
+		// Get the DataSource (Connection Pooling Object)
+		DataSource ds = ObjectMapper.getDs();
+		// Builds a Query
+		StringBuilder query = new StringBuilder(
+				"SELECT COUNT(" + ColumnName + ") FROM " + tableName + " WHERE " + ColumnName + " < '" + Value + "';");
+		// Try with Resources (connection object) - closes connection automatically
+		try (Connection conn = ds.getConnection()) {
+			// Creates the Prepared Statement using Query
+			PreparedStatement pstmt = conn.prepareStatement(query.toString());
+			// Executes Query to get Result Set
+			ResultSet rs = pstmt.executeQuery();
+			// While loop that iterates over every object returned from the Query
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Returns the List of Objects
+		return count;
+	}
+	
+	/**
+	 * Returns the {@code int} of Count that matches the Query of Database given
+	 * below </br>
+	 * Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName < Value;
+	 * 
+	 * @param tableName  String of the TableName defined by the User using the
+	 *                   {@code @Table} Annotation
+	 * @param ColumnName String of the field with {@code @Column} Annotation in
+	 *                   corresponding Class
+	 * @param Value      String of the value that is found in the corresponding
+	 *                   column
+	 * @return An int representing the count from the query
+	 */
+	public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value) {
+		// Gets all tables in our Object Mapper
+		tables = ObjectMapper.getTables();
+		// Initializes a Count to Return
+		int count = 0;
+		// Finds the class from the table name given
+		Class<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey).findFirst()
+				.get();
+		// Get the DataSource (Connection Pooling Object)
+		DataSource ds = ObjectMapper.getDs();
+		// Builds a Query
+		StringBuilder query = new StringBuilder(
+				"SELECT COUNT(" + ColumnName + ") FROM " + tableName + " WHERE " + ColumnName + " > '" + Value + "';");
+		// Try with Resources (connection object) - closes connection automatically
+		try (Connection conn = ds.getConnection()) {
+			// Creates the Prepared Statement using Query
+			PreparedStatement pstmt = conn.prepareStatement(query.toString());
+			// Executes Query to get Result Set
+			ResultSet rs = pstmt.executeQuery();
+			// While loop that iterates over every object returned from the Query
+			while (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Returns the List of Objects
+		return count;
+	}
+	
 
 }

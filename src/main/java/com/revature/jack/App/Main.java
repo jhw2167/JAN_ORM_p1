@@ -76,7 +76,7 @@ public class Main {
 		//QUERY FOR FORD 2021
 		System.out.println("Model is Ford and Year is 2021:");
 		List<Object> ford2021Query = ObjectQuery.returnObjectsWhere2ColumnsAre("cars", "model", "Ford","year","2021");
-		milesgreaterQuery.forEach(a -> System.out.println(a));
+		ford2021Query.forEach(a -> System.out.println(a));
 		System.out.println();
 		//QUERY FOR FORD newer than 2000 with Miles Not 10
 		System.out.println("Ford newer than 2000 with Miles not 10:");
@@ -85,12 +85,20 @@ public class Main {
 		String[] values = {"Ford","2000","10"};
 		try {
 			List<Object> complexQueryEx = ObjectQuery.returnObjectsWhereColumnsAre("cars", colNames, operands, values);
+			complexQueryEx.forEach(a -> System.out.println(a));
 		} catch (InvalidOperandException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		milesgreaterQuery.forEach(a -> System.out.println(a));
 		System.out.println();
+		// QUERY FOR COUNT OF OBJECTS WHERE Model = Ford
+		System.out.println("Count of cars that are Ford:");
+		System.out.println(ObjectQuery.returnCountOfObjectsWhereColumnIs("cars", "model", "Ford") + "\n");
+		// QUERY FOR COUNT OF OBJECTS WHERE MILES < 1000
+		System.out.println("Count of cars that have less than 1000 Miles:");
+		System.out.println(ObjectQuery.returnCountOfObjectsWhereColumnIsLessThan("cars", "miles", "1000") + "\n");
+		// QUERY FOR COUNT OF OBJECTS WHERE MILES > 1000
+		System.out.println("Count of cars that have more than 1000 Miles:");
+		System.out.println(ObjectQuery.returnCountOfObjectsWhereColumnIsGreaterThan("cars", "miles", "1000") + "\n");
 	}
 
 }
