@@ -71,7 +71,7 @@ public class Main {
 		System.out.println();
 		// QUERY FOR MILES GREATER THAN 10
 		System.out.println("Miles Greater than 10:");
-		List<Object> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsLessThan("cars", "miles", "10");
+		List<Object> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsGreaterThan("cars", "miles", "10");
 		milesgreaterQuery.forEach(a -> System.out.println(a));
 		System.out.println();
 
