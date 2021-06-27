@@ -13,7 +13,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 * PostGreSQL - _deployed on AWS RDS_
 * Git SCM (on GitHub) 
 
-## Featues
+## Features
 ### Ready to Use
 * Drop then create a table from on an annotated class
 * Save an instance of an object as an object
