@@ -16,7 +16,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 ## Features
 ### Ready to Use
 * Drop then create a table from on an annotated class
-* Save an instance of an object as an object
+* Save an instance of an object from the table as an object
 * Update an entry in the database
 * Delete an entry from the database
 * Find entries in the database that statisfy given columns, operands, and values
@@ -36,10 +36,10 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 * Second-Level Caching
 * Implementing Complex Queries
 * The Following SQL Aggregate Functions:
-  * Sum*
-  * Min*
-  * Max*
-  * Avg*
+  * Sum
+  * Min
+  * Max
+  * Avg
 
 ## Getting Started  
 ### Cloning the Application
@@ -57,7 +57,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
   </dependency>
 
 ```
-### Application.properties file
+### connection.properties file
 Ensure that you have created this file in **src/main/resource/** and have the following lines of code:
  ``` 
   url=path/to/database
@@ -108,7 +108,6 @@ ObjectQuery Class Method | Purpose
 ```public static void udpateAllWhere (String tableName, String columnName, String oldValue, String newValue)``` | Updates all values in the given column that match oldValue to newValue <br/>*Query: UPDATE tableName SET columnName = newValue WHERE columnName = oldValue;*
 ```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: UPDATE tableName SET column1 = value1, column2 = value2,... WHERE id = newObj.Id;*
 ```public static ObjectCache getCache()public static ObjectCache getCache()``` | Used to get an ObjectCache object to perform ObjectCache methods
-<!--```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query: DROP TABLE tableName;* -->
 
 
 #### ObjectCache Class
