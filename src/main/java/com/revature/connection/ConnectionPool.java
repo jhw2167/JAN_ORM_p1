@@ -93,7 +93,7 @@ public class ConnectionPool {
 	 */
 	private static void initConnectionProperties() {
 		
-		String filepath = "resources\\connection.properties";
+		String filepath = "src\\main\\resources\\connection.properties";
 		Properties prop = new Properties();
 		
 		//Load strings into properties

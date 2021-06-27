@@ -11,7 +11,8 @@ public class ErrorCheck {
 	public static boolean keywordCheck(String string) {
 		
 		try {
-		      File file = new File("keywords.txt");
+			  String filepath = "src\\main\\resources\\keywords.txt";
+		      File file = new File(filepath);
 		      Scanner scan = new Scanner(file);
 		      while (scan.hasNextLine()) {
 		        String data = scan.nextLine();
