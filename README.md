@@ -53,7 +53,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
   <dependency>
     <groupId>com.revature</groupId>
     <artifactId>JAN_ORM_p1</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
   </dependency>
 
 ```
