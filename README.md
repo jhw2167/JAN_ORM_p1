@@ -66,7 +66,7 @@ Ensure that you have created this file in **src/main/resources/** and have the f
   ```
 ## Usage
 ### Annotating Classes to Persist to Database
-For a class to be persisted to the database, it must be annoted using the following annotations:
+For a class to be persisted to the database, it must be a **JavaBean** and **annotated** using the following annotations:
 Annotation | Purpose
 -----------|--------
 ```@Table(name = "table_name")``` | Indicates to the ORM that this class is associated with table 'table_name'
