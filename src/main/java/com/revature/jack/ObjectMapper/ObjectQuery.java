@@ -721,13 +721,18 @@ public class ObjectQuery {
 		return count;
 	}
 	
-	public static void removeObjectFromTable(Car car)
+	public static void removeObjectFromTable(Object obj, String tableName)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
-		tables = ObjectMapper.getTables();
-		table = tables.get(car.getClass());
+		
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
-		String query = "DELETE FROM " + table.getTableName() + "WHERE id=" + car.getId();
+		int id = 0;
+		for (Field f : obj.getClass().getDeclaredFields()) {
+			if (f.isAnnotationPresent(PrimaryKey.class)) {
+				id = f.getInt(obj);
+			}
+		}
+		String query = "DELETE FROM " + table.getTableName() + "WHERE id=" + id;
 		
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
