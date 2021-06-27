@@ -196,7 +196,7 @@ public class ObjectMapper {
 	//END UPDATE DB METHOD
 	
 	/* to SQL obj */
-	public static SQLTable toTable(Class<?> c) throws NotMappableException, Exception 
+	public static SQLTable toTable(Class<?> c) throws NotMappableException 
 	{
 		/*
 		 * Use *reflection* to get the annotations and names of all
@@ -207,7 +207,7 @@ public class ObjectMapper {
 		if(!c.isAnnotationPresent(Table.class)) {
 			System.out.println("Class not mappable: please annotate " + 
 		"classes with @Table and fields with @Column");
-			throw new NotMappableException();
+			throw new NotMappableException(c.getName());
 		}
 		System.out.println("Moving to mapping columns: \n");
 		
@@ -219,10 +219,25 @@ public class ObjectMapper {
 		Field[] fields = c.getDeclaredFields();
 		
 		//parse through and get variables
-		for (Field f : fields) {
-			if(f.isAnnotationPresent(Column.class) && ErrorCheck.keywordCheck(f.getName())==false) {
-				table.addCol(new SQLColumn(f));
+		try {
+			for (Field f : fields) {
+				if(f.isAnnotationPresent(Column.class) && ErrorCheck.keywordCheck(f.getName())==false) {
+						table.addCol(new SQLColumn(f)); 
+				}
 			}
+		}
+		catch (NoSuchFieldException e) {
+			String err = "NoSuchFieldException caught attempting to add field '" 
+						+ e.getMessage() + "' for table '" + table.getTableName() + "'";
+			System.out.println(err);
+			e.printStackTrace();
+			throw new NotMappableException(table.getTableName());
+		} catch (InvalidColumnNameException e ) {
+			String err = "InvalidColumnNameException caught attempting to add field '" 
+					+ e.getMessage() + "' for table '" + table.getTableName() + "'";
+			System.out.println(err);
+			e.printStackTrace();
+			throw new NotMappableException(table.getTableName());
 		}
 		//End For
 		System.out.println("About to return table with values: \n" + table.toString());
@@ -299,7 +314,7 @@ public class ObjectMapper {
 			//Test for fk
 			if(col.getFk() != null) {
 				Pair<Class<?>, Field> pair = col.getFk();
-				String tableName = pair.v1.getName();
+				String tableName = pair.v1.getAnnotation(Table.class).name();
 				String colName = pair.v2.getName();
 				
 				val.append("REFERENCES " + tableName + " (" + colName + " ) ");

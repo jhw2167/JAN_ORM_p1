@@ -6,6 +6,8 @@ import com.revature.annotations.*;
 /*
  * Gives us some data about the country the car was produced in
  */
+
+@Table(name="producer_country")
 public class ProducerCountry {
 
 	/* Declare variables */

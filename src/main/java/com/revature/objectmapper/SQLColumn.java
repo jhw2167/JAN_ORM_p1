@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.revature.annotations.*;
+import com.revature.exceptions.*;
 import com.revature.utils.Pair;
 
 /*
@@ -73,12 +74,12 @@ public class SQLColumn {
 	// END FULL CONSTRUCTOR
 
 	// Create Column FROM FIELD TYPE
-	public SQLColumn(Field field) throws Exception {
+	public SQLColumn(Field field) throws NoSuchFieldException, InvalidColumnNameException {
 		super();
 
 		// Perform checks on data to make sure all is valids
 		if (!isValidColumnName(field.getName())) {
-			throw new Exception();
+			throw new InvalidColumnNameException(field.getName());
 		}
 
 		// Ensure java object is of simple type
@@ -86,7 +87,7 @@ public class SQLColumn {
 			String err = "Can't deduce SQL type for column: '" + field.getName();
 			err += "' of java type: '" + field.getType().toGenericString();
 			err += "'. complex objects will have to be their own tables, see documentation";
-			throw new Exception(err);
+			throw new NoSuchFieldException(err);
 		}
 
 		// Establish vars
@@ -106,10 +107,22 @@ public class SQLColumn {
 				: null;
 
 		// Establishing foreign key takes a little bit of work
-		if (field.isAnnotationPresent(ForeignKey.class)) {
+		if (field.isAnnotationPresent(ForeignKey.class)) 
+		{
+			System.out.println("about to add foreign key for column: " + name);
 			ForeignKey fkObject = field.getAnnotation(ForeignKey.class);
 			Class<?> fkClass = fkObject.refClass();
-			Field fkColName = fkClass.getField(fkObject.refColumn());
+			Field fkColName = null;
+			
+			try {
+				fkColName = fkClass.getDeclaredField(fkObject.refColumn());	
+			} catch (NoSuchFieldException e) {
+				String err = "NoSuchFieldException caught attempting to add field '" 
+						+ e.getMessage() + "' for table '" + fkClass.getName() + "'";
+				System.out.println(err);
+				throw e;
+			}
+			
 			this.fk = new Pair<Class<?>, Field>(fkClass, fkColName);
 		} else {
 			this.fk = null;
@@ -175,18 +188,31 @@ public class SQLColumn {
 	}
 
 	private static void loadSQLJavaValuePairs() {
-		// create properties object
-
-		// open valuePairs.xml
-
-		// load properties
+		
+		//Numeric(Precision, Scale)
+		//Precision is number of digits,
+		//scale is number to the right of decimal
 
 		// init our typemap
 		typeMap.put(int.class, "INTEGER");
 		typeMap.put(Integer.class, "INTEGER");
-		typeMap.put(String.class, "TEXT");
+		typeMap.put(long.class, "INTEGER");
+		typeMap.put(Long.class, "INTEGER");
+		
+		typeMap.put(short.class, "INTEGER");
+		typeMap.put(Short.class, "INTEGER");
+		
 		typeMap.put(float.class, "NUMERIC");
-		typeMap.put(Date.class, "DATE");
+		typeMap.put(Float.class, "NUMERIC");
+		typeMap.put(double.class, "NUMERIC");
+		typeMap.put(Double.class, "NUMERIC");
+		
+		typeMap.put(boolean.class, "BIT");
+		typeMap.put(Boolean.class, "BIT");
+		
+		typeMap.put(char.class, "CHAR(1)");
+		typeMap.put(Character.class, "CHAR(1)");
+		typeMap.put(String.class, "TEXT");
 	}
 
 }
