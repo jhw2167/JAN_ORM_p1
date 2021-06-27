@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import com.revature.jack.Annotations.PrimaryKey;
 import com.revature.jack.App.Car;
 
 public class ObjectUD {
@@ -76,6 +77,44 @@ public class ObjectUD {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void addObjectToTable(Object obj, Object newObj)
+			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+		tables = ObjectMapper.getTables();
+		table = tables.get(obj.getClass());
+		PreparedStatement pstmt;
+		int pKey = 0;
+		DataSource ds = ObjectMapper.getDs();
+		StringBuilder query = new StringBuilder("UPDATE " + table.getTableName() + " SET ");
+		Collection<SQLColumn> cols = table.getColumns().values();
+		List<Object> value = new ArrayList<>();
+		for (SQLColumn col : cols) {
+			query.append(col.getName() + " = ");
+			Field field = newObj.getClass().getDeclaredField(col.getName());
+			field.setAccessible(true);
+			value.add(field.get(newObj));
+			query.append(field.toString() + ", ");
+		}
+		query.deleteCharAt(query.length() - 1);
+		for (Field f : newObj.getClass().getDeclaredFields()) {
+			if (f.isAnnotationPresent(PrimaryKey.class)) {
+				pKey=f.getInt(newObj);
+			}
+		}
+		query.append(" WHERE id= " + pKey);
+		query.append(";");
+
+		//System.out.println(query.toString());
+
+		try (Connection conn = ds.getConnection();) {
+			pstmt = conn.prepareStatement(query.toString());
+			pstmt.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 	
