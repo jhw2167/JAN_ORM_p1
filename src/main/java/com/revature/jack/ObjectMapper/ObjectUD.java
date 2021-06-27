@@ -79,7 +79,7 @@ public class ObjectUD {
 		
 	}
 	
-	public static void addObjectToTable(Object obj, Object newObj)
+	public static void updateObjectToTable(Object obj, Object newObj)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		tables = ObjectMapper.getTables();
 		table = tables.get(obj.getClass());
