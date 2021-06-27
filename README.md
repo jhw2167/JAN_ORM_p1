@@ -103,11 +103,11 @@ ObjectQuery Class Method | Purpose
 ```public static int returnCountOfObjectsWhereColumnIs(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;*
 ```public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
 ```public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
-```public static void removeObjectFromTable(Object obj, String tableName)``` | Removes given object from the database <br/>*Query: ;*
+```public static void removeObjectFromTable(Object obj, String tableName)``` | Removes given object from the database <br/>*Query: DELETE FROM tableName WHERE id = objId;*
 ```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query: DROP TABLE tableName;*
 ```public static void truncateTable(String tableName)``` | Truncates given table in the database <br/>*Query: TRUNCATE TABLE tableName;*
-```public static void udpateAllWhere (String tableName, String columnName, String oldValue, String newValue)``` | Updates all values in the given column that match oldValue to newValue <br/>*Query: ;*
-```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: ;*
+```public static void udpateAllWhere (String tableName, String columnName, String oldValue, String newValue)``` | Updates all values in the given column that match oldValue to newValue <br/>*Query: UPDATE tableName SET columnName = newValue WHERE columnName = oldValue;*
+```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: UPDATE tablName SET column1 = value1, column2 = value2,... WHERE id = newObjId;*
 
 
 #### ObjectCache Class
