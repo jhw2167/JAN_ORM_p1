@@ -51,19 +51,14 @@ public class Main {
 		Brand bmw = new Brand("BMW", 1916, "Germany");
 		Brand ford = new Brand("Ford", 1903, "USA");
 		Brand honda = new Brand("Honda", 1958, "Japan");
-		Brand toyota = new Brand("Toyota", 1937, "Japan");
-<<<<<<< HEAD:src/main/java/com/revature/app/Main.java
-		
+		Brand toyota = new Brand("Toyota", 1937, "Japan");		
 		
 		ObjectQuery.addObjectToTable(bmw);
 		ObjectQuery.addObjectToTable(ford);
 		ObjectQuery.addObjectToTable(honda);
 		ObjectQuery.addObjectToTable(toyota);
 		
-		
-=======
 
->>>>>>> 639a7507d45931eab78855f6ac9103aece0ab0ec:src/main/java/com/revature/jack/App/Main.java
 		// Create Table from Class
 		Car newCar = new Car(4, "Ford", 2021, 4, 0.0f);
 		Car newCar2 = new Car(5, "BMW", 2020, 5, 0.0f);
@@ -125,6 +120,7 @@ public class Main {
 		String[] colNames = { "model", "year", "miles" };
 		String[] operands = { "=", ">", "<>" };
 		String[] values = { "Ford", "2000", "10" };
+		
 		try {
 			List<Object> complexQueryEx = ObjectQuery.returnObjectsWhereColumnsAre("cars", colNames, operands, values);
 			complexQueryEx.forEach(a -> System.out.println(a));

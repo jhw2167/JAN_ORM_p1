@@ -56,7 +56,7 @@ public class ProducerCountry {
 		this.numManufactuers = numManufactuers;
 	}
 
-	public int getTotalAnnual() {
+	public long getTotalAnnual() {
 		return totalAnnual;
 	}
 

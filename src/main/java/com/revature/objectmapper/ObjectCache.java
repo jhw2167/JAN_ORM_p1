@@ -1,4 +1,4 @@
-package com.revature.jack.ObjectMapper;
+package com.revature.objectmapper;
 
 import java.util.HashMap;
 import java.util.HashSet;
