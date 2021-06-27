@@ -1,13 +1,14 @@
 package com.revature.jack.App;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.aron.exceptions.*;
-import com.revature.jack.ObjectMapper.*;
+import com.revature.aron.exceptions.InvalidOperandException;
+import com.revature.jack.ObjectMapper.DatabaseTransaction;
+import com.revature.jack.ObjectMapper.ObjectCache;
+import com.revature.jack.ObjectMapper.ObjectMapper;
+import com.revature.jack.ObjectMapper.ObjectQuery;
 
 public class Main {
 
@@ -17,7 +18,7 @@ public class Main {
 		// Lets go ahead and see if we get the correct values
 		// for our car class:
 
-		//Add our car class to model
+		// Add our car class to model
 		try {
 			ObjectMapper.addToModel(Car.class);
 			ObjectMapper.addToModel(Brand.class);
@@ -25,8 +26,8 @@ public class Main {
 			System.out.println("Exception caught adding model: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
-		//Add table to SQL
+
+		// Add table to SQL
 		try {
 			ObjectMapper.buildDBFromModel();
 		} catch (SQLException e) {
@@ -42,8 +43,7 @@ public class Main {
 		Brand ford = new Brand("Ford", 1903, "USA");
 		Brand honda = new Brand("Honda", 1958, "Japan");
 		Brand toyota = new Brand("Toyota", 1937, "Japan");
-		
-		
+
 		// Create Table from Class
 		Car newCar = new Car(4, "Ford", 2021, 4, 0.0f);
 		Car newCar2 = new Car(5, "BMW", 2020, 5, 0.0f);
@@ -53,8 +53,8 @@ public class Main {
 		ObjectQuery.addObjectToTable(newCar);
 		ObjectQuery.addObjectToTable(newCar2);
 		ObjectQuery.addObjectToTable(oldCar);
-		
-		//Transaction
+
+		// Transaction
 		try {
 			DatabaseTransaction.beginTransaction();
 			ObjectQuery.addObjectToTable(oldCar2);
@@ -69,7 +69,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		// QUERY for ALL CARS
 		System.out.println("All Cars After RollBack:");
 		List<Object> allCarsQuery = ObjectQuery.returnAllObjectsFromTable("cars");
@@ -95,16 +95,16 @@ public class Main {
 		List<Object> milesgreaterQuery = ObjectQuery.returnObjectsWhereColumnIsGreaterThan("cars", "miles", "10");
 		milesgreaterQuery.forEach(a -> System.out.println(a));
 		System.out.println();
-		//QUERY FOR FORD 2021
+		// QUERY FOR FORD 2021
 		System.out.println("Model is Ford and Year is 2021:");
-		List<Object> ford2021Query = ObjectQuery.returnObjectsWhere2ColumnsAre("cars", "model", "Ford","year","2021");
+		List<Object> ford2021Query = ObjectQuery.returnObjectsWhere2ColumnsAre("cars", "model", "Ford", "year", "2021");
 		ford2021Query.forEach(a -> System.out.println(a));
 		System.out.println();
-		//QUERY FOR FORD newer than 2000 with Miles Not 10
+		// QUERY FOR FORD newer than 2000 with Miles Not 10
 		System.out.println("Ford newer than 2000 with Miles not 10:");
-		String[] colNames = {"model","year","miles"};
-		String[] operands = {"=",">","<>"};
-		String[] values = {"Ford","2000","10"};
+		String[] colNames = { "model", "year", "miles" };
+		String[] operands = { "=", ">", "<>" };
+		String[] values = { "Ford", "2000", "10" };
 		try {
 			List<Object> complexQueryEx = ObjectQuery.returnObjectsWhereColumnsAre("cars", colNames, operands, values);
 			complexQueryEx.forEach(a -> System.out.println(a));
@@ -121,6 +121,12 @@ public class Main {
 		// QUERY FOR COUNT OF OBJECTS WHERE MILES > 1000
 		System.out.println("Count of cars that have more than 1000 Miles:");
 		System.out.println(ObjectQuery.returnCountOfObjectsWhereColumnIsGreaterThan("cars", "miles", "1000") + "\n");
+		
+		// QUERY The CACHE;
+		System.out.println("Cache Objects");
+		ObjectCache oCache = ObjectQuery.getCache();
+		oCache.getAllObjectsInCache(Car.class).forEach(car -> System.out.println(car));
+		
 	}
 
 }

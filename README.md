@@ -1,7 +1,7 @@
 # JAN ORM
 
 ## JAN ORM Description
-JAN ORM is a java based lightweight Object Relational Mapper used for connection to a PostGreSQL Databse without the need for SQL or Connection Management. 
+JAN ORM is a Java based lightweight Object Relational Mapper used for connection to a PostGreSQL Database without the need for SQL or Connection Management. 
 
 **Authors:** *Jack Welsh, Aron Jang, Nate Opsal*<br/>
 **Date Last Updated:** *6/26/21*
@@ -20,14 +20,14 @@ JAN ORM is a java based lightweight Object Relational Mapper used for connection
 * Update an entry in the database
 * Delete an entry from the database
 * Find entries in the database that statisfy given columns, operands, and values
-* Add given constriant on table using annotations
+* Add given constraint on columns using annotations
   * Primary Key
   * Foreign Key
   * Check
   * Unique
   * Default Value
   * Not Null
-* First Level Caching
+* Basic Caching
 * The Following SQL Aggregate Functions:
   * Count
 * Transaction Control
@@ -103,19 +103,30 @@ ObjectQuery Class Method | Purpose
 ```public static int returnCountOfObjectsWhereColumnIs(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;*
 ```public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
 ```public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
-```public static void removeObjectFromTable(Object obj, String tableName)``` | Removes given object from the database <br/>*Query: DELETE FROM tableName WHERE id = objId;*
-```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query: DROP TABLE tableName;*
+```public static void removeObjectFromTable(Object obj, String tableName)``` | Removes given object from the database <br/>*Query: DELETE FROM tableName WHERE id = obj.Id;*
 ```public static void truncateTable(String tableName)``` | Truncates given table in the database <br/>*Query: TRUNCATE TABLE tableName;*
 ```public static void udpateAllWhere (String tableName, String columnName, String oldValue, String newValue)``` | Updates all values in the given column that match oldValue to newValue <br/>*Query: UPDATE tableName SET columnName = newValue WHERE columnName = oldValue;*
-```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: UPDATE tablName SET column1 = value1, column2 = value2,... WHERE id = newObjId;*
+```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: UPDATE tableName SET column1 = value1, column2 = value2,... WHERE id = newObj.Id;*
+```public static ObjectCache getCache()public static ObjectCache getCache()``` | Used to get an ObjectCache object to perform ObjectCache methods
+<!--```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query: DROP TABLE tableName;* -->
 
 
 #### ObjectCache Class
-*Used to query the Cache*
+*Used to query the Cache*<br/>
+*To get a cache Object, use ObjectQuery.getCache()*
 ObjectCache Class Method | Purpose
 -----------|--------
+```public void addObjectToCache(Object obj)```|Adds Object obj to the Cache
+```public void deleteObjectFromCache(Object obj)```|Deletes Object obj from the Cache
+```public HashSet<Object> getAllObjectsInCache(Class<?> clazz)```|Gets all objects of Class clazz from the Cache and returns in a HashSet
+```public void deleteAllObjectsInCache(Class<?> clazz)```|Deletes all objects of Class clazz fromthe Cache
 
 #### DatabaseTransaction Class
-*Used to set Transactions the Database*
-ObjectCache Class Method | Purpose
+*Used to set Transactions the Database<br/>A Transaction must start with **beginTransaction()** and end with **commitTransaction()***
+DatabaseTransaction Class Method | Purpose
 -----------|--------
+```public static void beginTransaction()``` | Used to begin a Transaction<br/>*Query: BEGIN;*
+```public static void commitTransaction()``` | Used to commit a Transaction<br/>*Query: COMMIT;*
+```public static void setSavepoint(String SavePointName)``` | Used to set a Transaction Save Point<br/>*Query: SAVEPOINT SavePointName;*
+```public static void rollbackToSavepoint(String SavePointName)``` | Used to begin a Transaction<br/>*Query: ROLLBACK TO SAVEPOINT SavePointName;*
+```public static void rollbackTransaction()``` | Used to begin a Transaction<br/>*Query: ROLLBACK;*

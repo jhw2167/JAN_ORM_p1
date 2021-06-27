@@ -1,11 +1,14 @@
 package com.revature.jack.App;
 
-//IMPORTS
-import com.revature.jack.Annotations.*;
-import com.revature.nate.annotations.NoArgsContructor;
-import com.revature.nate.annotations.Setter;
+import java.util.Objects;
 
-import java.util.Date;
+//IMPORTS
+import com.revature.jack.Annotations.CheckColumn;
+import com.revature.jack.Annotations.Column;
+import com.revature.jack.Annotations.NotNull;
+import com.revature.jack.Annotations.PrimaryKey;
+import com.revature.jack.Annotations.Table;
+import com.revature.jack.Annotations.Unique;
 
 /*
  * 		Example class car that we will map into SQL using
@@ -93,6 +96,23 @@ public class Car {
 	public String toString() {
 		return "Car [id=" + id + ", model=" + model + ", year=" + year + ", valves=" + valves + ", miles=" + miles
 				+ ", qID=" + qID + "]";
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, miles, model, qID, valves, year);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Car other = (Car) obj;
+		return id == other.id && Float.floatToIntBits(miles) == Float.floatToIntBits(other.miles)
+				&& Objects.equals(model, other.model) && qID == other.qID && Objects.equals(valves, other.valves)
+				&& year == other.year;
 	}
 
 	

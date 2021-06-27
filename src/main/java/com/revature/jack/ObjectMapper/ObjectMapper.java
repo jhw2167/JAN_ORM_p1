@@ -1,13 +1,10 @@
 package com.revature.jack.ObjectMapper;
 
 
-import java.io.PrintStream;
-
 //IMPORTS
 
 //Reflection Imports
 import java.lang.reflect.Field;
-
 //Java SQL imports
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +16,6 @@ import java.util.Collection;
 //Java Lib Imports
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +27,13 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//Project Imports
-import com.revature.jack.Annotations.*;
-import com.revature.aron.exceptions.*;
-import com.revature.jack.utils.Pair;
-import com.revature.aron.connection.*;
+import com.revature.aron.connection.ConnectionPool;
 import com.revature.aron.exceptions.ForeignKeyException;
 import com.revature.aron.exceptions.NotMappableException;
+//Project Imports
+import com.revature.jack.Annotations.Column;
+import com.revature.jack.Annotations.Table;
+import com.revature.jack.utils.Pair;
 import com.revature.nate.errors.ErrorCheck;
 
 /*
