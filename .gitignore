@@ -26,4 +26,5 @@ hs_err_pid*
 target/
 *.properties
 src/test/
+*.bash
 JAN_ORM_p1/
