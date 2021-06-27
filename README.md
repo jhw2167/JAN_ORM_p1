@@ -19,7 +19,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 * Save an instance of an object from the table as an object
 * Update an entry in the database
 * Delete an entry from the database
-* Find entries in the database that statisfy given columns, operands, and values
+* Find entries in the database that satisfy given columns, operands, and values
 * Add given constraint on columns using annotations
   * Primary Key
   * Foreign Key
@@ -35,6 +35,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 ### Future Devlopement
 * Second-Level Caching
 * Implementing Complex Queries
+* Implementing Stored Procedures
 * The Following SQL Aggregate Functions:
   * Sum
   * Min
