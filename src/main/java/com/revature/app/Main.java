@@ -28,10 +28,7 @@ public class Main {
 		// Add table to SQL
 		try {
 			ObjectMapper.buildDBFromModel();
-		} catch (SQLException e) {
-			System.out.println("SQLException caught building db: " + e.getMessage());
-			e.printStackTrace();
-		} catch (Exception e) {
+		}  catch (Exception e) {
 			System.out.println("Exception caught building db: " + e.getMessage());
 			e.printStackTrace();
 		}

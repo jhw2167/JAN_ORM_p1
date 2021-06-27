@@ -109,7 +109,6 @@ public class SQLColumn {
 		// Establishing foreign key takes a little bit of work
 		if (field.isAnnotationPresent(ForeignKey.class)) 
 		{
-			System.out.println("about to add foreign key for column: " + name);
 			ForeignKey fkObject = field.getAnnotation(ForeignKey.class);
 			Class<?> fkClass = fkObject.refClass();
 			Field fkColName = null;

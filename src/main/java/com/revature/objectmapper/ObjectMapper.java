@@ -16,6 +16,7 @@ import java.util.Collection;
 //Java Lib Imports
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -115,11 +116,21 @@ public class ObjectMapper {
 	 * 	This operation WILL drop all data and tables in the EXISTING DB, so do not
 	 *  use it unless you want to start fresh
 	 */
-	public static void buildDBFromModel() throws Exception {
+	public static void buildDBFromModel() throws ForeignKeyException, NotMappableException {
 		Collection<SQLTable> buildables = orderTablesByFK();
-		for (SQLTable t : buildables) {
-			createTable(t);
+		String errTable = "";
+		
+		try {
+			for (SQLTable t : buildables) {
+				errTable = t.getTableName();
+				createTable(t);
+			}
+		} catch(SQLException e) {
+			String err = "SQL Exception generated from mapping with message " + e.getMessage();
+			System.out.println(err);
+			throw new NotMappableException(errTable);
 		}
+		
 	}
 	//END BUILDMODEL METHOD
 	
@@ -132,14 +143,14 @@ public class ObjectMapper {
 		Queue<SQLTable> queue = new LinkedList<>();
 		
 		//Alternative, set, queue implementation
-		Set<SQLTable> ordered = new HashSet<>();
+		Set<SQLTable> ordered = new LinkedHashSet<>();
 		
 		//Add all values to set and queue initially
 		for (SQLTable t : buildables) {
 			orderTablesHelper(t, queue, ordered);
 		}
 		
-		int limit = queue.size() + 1;	//After n^2 iterations, there must be a circular dependency
+		int limit = queue.size()^2 + 1;	//After n^2 iterations, there must be a circular dependency
 										//in our relationships and we will exit
 		while(!queue.isEmpty() && limit > 0) {
 			SQLTable t = queue.poll();
@@ -156,14 +167,18 @@ public class ObjectMapper {
 	
 	/*
 	 * Helper method will determine if next table up should be added to the 
-	 * set (can be added safely) or 
+	 * set (can be added safely) or needs another table added before it
 	 */
 	
 	private static void orderTablesHelper(SQLTable t, Queue<SQLTable> queue, Set<SQLTable> ordered) 
 	{
 		List<Class<?>> refs = t.getReferences();
+		//System.out.println("\n\nConsidering table: " + t.getTableName() + " references: ");
+		
 		boolean canAdd = true;
-		for (Class<?> c : refs) {
+		for (Class<?> c : refs) 
+		{
+			//System.out.println("\t- " + c.getSimpleName());
 			if(!ordered.contains(tables.get(c))) {
 				canAdd = false;
 				break;
@@ -209,7 +224,7 @@ public class ObjectMapper {
 		"classes with @Table and fields with @Column");
 			throw new NotMappableException(c.getName());
 		}
-		System.out.println("Moving to mapping columns: \n");
+		//System.out.println("Moving to mapping columns: \n");
 		
 		//Create new SQL table
 		SQLTable table = new SQLTable(c.getAnnotation(Table.class).name());
@@ -240,7 +255,7 @@ public class ObjectMapper {
 			throw new NotMappableException(table.getTableName());
 		}
 		//End For
-		System.out.println("About to return table with values: \n" + table.toString());
+		//System.out.println("About to return table with values: \n" + table.toString());
 		
 		return table;
 	}
@@ -283,6 +298,7 @@ public class ObjectMapper {
 		//iterate over map in our SQLTable
 		Collection<SQLColumn> cols = table.getColumns().values();
 		
+		
 		for(SQLColumn col : cols) 
 		{
 			//Init value for our new column
@@ -317,7 +333,7 @@ public class ObjectMapper {
 				String tableName = pair.v1.getAnnotation(Table.class).name();
 				String colName = pair.v2.getName();
 				
-				val.append("REFERENCES " + tableName + " (" + colName + " ) ");
+				val.append("REFERENCES " + tableName + " (" + colName + ") ");
 			}
 			//INTERNALLY WE NEED TO ENSURE TABLES ARE CREATED IN PROPER ORDER
 			//I think a multiMap is usable here
@@ -341,8 +357,15 @@ public class ObjectMapper {
 		query.append(");");
 		
 		//Execute query
+		
+		System.out.println("About to get connection");
+		
 		Connection conn = ds.getConnection();
-		System.out.println("Final query:\n" + query.toString());
+		
+		String errTable = table.getTableName();
+		System.out.println("Creating table: " + errTable + ", columns: " + cols);
+		
+		System.out.println("\n\nFinal query:\n" + query.toString());
 		PreparedStatement pstmt = conn.prepareStatement(query.toString());
 		return pstmt.execute();
 	}
