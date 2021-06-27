@@ -58,7 +58,7 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 
 ```
 ### connection.properties file
-Ensure that you have created this file in **resource/** and have the following lines of code:
+Ensure that you have created this file in **resources/** and have the following lines of code:
  ``` 
   url=path/to/database
   username=username/of/database
