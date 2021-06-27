@@ -1,6 +1,7 @@
 package com.revature.app;
 
 import com.revature.annotations.*;
+import com.revature.app.ProducerCountry;
 
 @Table(name="brand")
 public class Brand {
