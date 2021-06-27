@@ -372,17 +372,13 @@ public class ObjectMapper {
 		query.delete(query.length() - 2, query.length());
 		query.append(");");
 		
-		//Execute query
-		
-		System.out.println("About to get connection");
-		
 		//Set and execute our prepared statement
 		boolean createSuccess = false;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		
 		try {
-			System.out.println("\n\nFinal query:\n" + query.toString());
+			//System.out.println("\n\nFinal query:\n" + query.toString());
 			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(query.toString());
 			createSuccess = pstmt.execute();
