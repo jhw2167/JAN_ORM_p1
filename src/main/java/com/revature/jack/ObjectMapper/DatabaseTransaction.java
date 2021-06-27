@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import com.revature.aron.exceptions.InvalidSavePointException;
+
 public class DatabaseTransaction {
 	/**
 	 * Method to beginTransaction
@@ -40,10 +42,14 @@ public class DatabaseTransaction {
 	/**
 	 * Method to set a Save Point in A Transaction
 	 * @param SavePointName
+	 * @throws InvalidSavePointException 
 	 */
-	public static void setSavepoint(String SavePointName) {
+	public static void setSavepoint(String SavePointName) throws InvalidSavePointException {
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
+		if(SavePointName.contains(" ")) {
+			throw new InvalidSavePointException("Invalid Savepoint Name, cannot contain spaces");
+		}
 		StringBuilder query = new StringBuilder("SAVEPOINT " + SavePointName + ";");
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query.toString());
