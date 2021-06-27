@@ -26,3 +26,4 @@ hs_err_pid*
 target/
 *.properties
 src/test/
+src/main/java/com/revature/app

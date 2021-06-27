@@ -8,3 +8,4 @@ CREATE SCHEMA automobiles;
 --Create tables
 DROP TABLE IF EXISTS producer_country CASCADE;
 DROP TABLE IF EXISTS brand CASCADE;
+DROP TABLE IF EXISTS cars CASCADE;

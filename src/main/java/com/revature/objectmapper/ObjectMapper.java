@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 //Java Lib Imports
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,9 +23,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.revature.annotations.*;
 import com.revature.connection.*;
@@ -141,11 +137,19 @@ public class ObjectMapper {
 			orderTablesHelper(t, queue, ordered);
 		}
 		
-		int limit = queue.size()^2 + 1;	//After n^2 iterations, there must be a circular dependency
-										//in our relationships and we will exit
-		while(!queue.isEmpty() && limit > 0) {
+		int limit = (int) (Math.pow(tables.size(), 2) + 1);	//After n^2 iterations, there must be a circular dependency
+															//in our relationships and we will exit
+		
+		System.out.println("size of limit: " + limit);
+		
+		while(!queue.isEmpty() && limit-- > 0) {
 			SQLTable t = queue.poll();
 			orderTablesHelper(t, queue, ordered);
+			
+			System.out.println("In set: ");
+			for (SQLTable tab : ordered) {
+				System.out.println(tab.getTableName());
+			}
 		}
 		
 		//Throw exception if queue isnt empty - should be ForeignKey exception...
@@ -164,24 +168,29 @@ public class ObjectMapper {
 	private static void orderTablesHelper(SQLTable t, Queue<SQLTable> queue, Set<SQLTable> ordered) 
 	{
 		List<Class<?>> refs = t.getReferences();
-		//System.out.println("\n\nConsidering table: " + t.getTableName() + " references: ");
+		System.out.println("\n\nConsidering table: " + t.getTableName() + " references: ");
 		
 		boolean canAdd = true;
 		for (Class<?> c : refs) 
 		{
-			//System.out.println("\t- " + c.getSimpleName());
+			System.out.println("\t- " + c.getSimpleName());
+			System.out.println("\t- Tables get: " + tables.get(c));
+			System.out.println("\t- Ordered Contains: " + ordered.contains(tables.get(c)));
 			if(!ordered.contains(tables.get(c))) {
 				canAdd = false;
 				break;
 			}
 		}
 		
+		System.out.println("Can add: " + canAdd);
 		//We can add table if all REFERENCED tables have already been added
 		if(canAdd) {
 			ordered.add(t);
 		} else {
 			queue.add(t);
 		}
+		System.out.println();
+		System.out.println();
 	}
 	
 	
