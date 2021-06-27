@@ -6,7 +6,4 @@ CREATE SCHEMA automobiles;
 
 
 --Create tables
-CREATE TABLE cars (
-
-
-);
+DROP TABLE cars IF EXISTS CASCADE;
