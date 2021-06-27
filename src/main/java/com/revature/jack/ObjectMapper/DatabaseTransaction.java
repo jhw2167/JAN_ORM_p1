@@ -80,7 +80,7 @@ public class DatabaseTransaction {
 	 * Method used to roll back to beginning of transaction
 	 * @param SavePointName
 	 */
-	public static void rollbackTransaction(String SavePointName) throws SQLException{
+	public static void rollbackTransaction() throws SQLException{
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		StringBuilder query = new StringBuilder("ROLLBACK;");
