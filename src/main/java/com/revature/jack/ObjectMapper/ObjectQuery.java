@@ -743,11 +743,11 @@ public class ObjectQuery {
 		}
 	}
 	
-	public static void dropTable(SQLTable table) {
+	public static void dropTable(String tableName) {
 		
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
-		String query = "DROP TABLE IF EXISTS " + table.getTableName();
+		String query = "DROP TABLE IF EXISTS " + tableName;
 		
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
@@ -758,11 +758,11 @@ public class ObjectQuery {
 		}
 	}
 	
-	public static void truncateTable(SQLTable table) {
+	public static void truncateTable(String tableName) {
 		
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
-		String query = "TRUNCATE TABLE IF EXISTS " + table.getTableName();
+		String query = "TRUNCATE TABLE IF EXISTS " + tableName;
 		
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
