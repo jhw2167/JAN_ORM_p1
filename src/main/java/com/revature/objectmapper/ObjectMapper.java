@@ -272,6 +272,7 @@ public class ObjectMapper {
 			
 		} catch (SQLException e) {
 			System.out.println("SQLException caught trying to drop table: " + table.getTableName());
+			System.out.println("MESSAGE: " + e.getMessage());
 		} 
 		finally 
 		{	

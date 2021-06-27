@@ -35,6 +35,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+		System.out.println("Successfully ran test");
 		/*
 		 * // Create table for countries ProducerCountry germany = new
 		 * ProducerCountry("Germany", 5, 4_700_000); ProducerCountry usa = new

@@ -71,7 +71,8 @@ public class ConnectionPool {
 		// Object created by the above connection Factory in order to add pooling
 		// functionality
 		PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, gPool, null, null, false, true);
-
+		System.out.println("Successfully connected to database");
+		
 		return new PoolingDataSource(gPool);
 
 	}
@@ -113,7 +114,6 @@ public class ConnectionPool {
 			e.printStackTrace();
 			System.exit(2);
 		}
-		
 		
 	}
 	//END INIT PROJECT PROPERTIES
