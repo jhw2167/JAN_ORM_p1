@@ -104,8 +104,8 @@ ObjectQuery Class Method | Purpose
 ```public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName <> Value;*
 ```public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns Count of the number of objects in the database where the condition is met<br/>*Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName > Value;*
 ```public static void removeObjectFromTable(Object obj, String tableName)``` | Removes given object from the database <br/>*Query: ;*
-```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query:DROP TABLE tableName;*
-```public static void truncateTable(String tableName)``` | Truncates given table in the database <br/>*Query:TRUNCATE TABLE tableName;*
+```public static void dropTable(String tableName)``` | Drops given table in the database <br/>*Query: DROP TABLE tableName;*
+```public static void truncateTable(String tableName)``` | Truncates given table in the database <br/>*Query: TRUNCATE TABLE tableName;*
 ```public static void udpateAllWhere (String tableName, String columnName, String oldValue, String newValue)``` | Updates all values in the given column that match oldValue to newValue <br/>*Query: ;*
 ```public static void updateObjectToTable(Object newObj)``` | Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/>*Query: ;*
 
