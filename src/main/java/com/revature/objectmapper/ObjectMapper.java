@@ -1,13 +1,10 @@
 package com.revature.objectmapper;
 
 
-import java.io.PrintStream;
-
 //IMPORTS
 
 //Reflection Imports
 import java.lang.reflect.Field;
-
 //Java SQL imports
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +16,6 @@ import java.util.Collection;
 //Java Lib Imports
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +32,7 @@ import com.revature.connection.*;
 import com.revature.errors.ErrorCheck;
 import com.revature.exceptions.*;
 import com.revature.utils.Pair;
+
 
 /*
  *  	Simple java object mapper class to TAKE IN an object of type class
