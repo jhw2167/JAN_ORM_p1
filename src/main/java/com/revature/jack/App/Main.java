@@ -53,6 +53,11 @@ public class Main {
 		ObjectQuery.addObjectToTable(newCar);
 		ObjectQuery.addObjectToTable(newCar2);
 		ObjectQuery.addObjectToTable(oldCar);
+		// QUERY for ALL CARS
+		System.out.println("All Cars:");
+		List<Object> allCarsQuery = ObjectQuery.returnAllObjectsFromTable("cars");
+		allCarsQuery.forEach(a -> System.out.println(a));
+		System.out.println();
 		// QUERY for FORD
 		System.out.println("Model is Ford:");
 		List<Object> fordQuery = ObjectQuery.returnObjectsWhereColumnIs("cars", "model", "Ford");

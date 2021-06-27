@@ -1,21 +1,13 @@
 package com.revature.jack.ObjectMapper;
 
-
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -23,7 +15,7 @@ import com.revature.jack.Annotations.PrimaryKey;
 import com.revature.jack.App.Car;
 
 public class ObjectUD {
-	
+
 	static Map<Class<?>, SQLTable> tables;
 	static SQLTable table;
 
@@ -34,7 +26,6 @@ public class ObjectUD {
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		String query = "DELETE FROM " + table.getTableName() + "WHERE id=" + car.getId();
-		
 
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
@@ -45,13 +36,12 @@ public class ObjectUD {
 		}
 
 	}
-	
+
 	public static void dropTable(SQLTable table) {
-		
+
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		String query = "DROP TABLE IF EXISTS " + table.getTableName();
-		
 
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
@@ -61,13 +51,12 @@ public class ObjectUD {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void truncateTable(SQLTable table) {
-		
+
 		PreparedStatement pstmt;
 		DataSource ds = ObjectMapper.getDs();
 		String query = "TRUNCATE TABLE IF EXISTS " + table.getTableName();
-		
 
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query);
@@ -76,9 +65,9 @@ public class ObjectUD {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public static void updateObjectToTable(Object obj, Object newObj)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		tables = ObjectMapper.getTables();
@@ -99,13 +88,13 @@ public class ObjectUD {
 		query.deleteCharAt(query.length() - 1);
 		for (Field f : newObj.getClass().getDeclaredFields()) {
 			if (f.isAnnotationPresent(PrimaryKey.class)) {
-				pKey=f.getInt(newObj);
+				pKey = f.getInt(newObj);
 			}
 		}
 		query.append(" WHERE id= " + pKey);
 		query.append(";");
 
-		//System.out.println(query.toString());
+		// System.out.println(query.toString());
 
 		try (Connection conn = ds.getConnection();) {
 			pstmt = conn.prepareStatement(query.toString());
@@ -116,7 +105,5 @@ public class ObjectUD {
 		}
 
 	}
-	
-	
-	
+
 }

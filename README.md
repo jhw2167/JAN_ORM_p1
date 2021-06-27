@@ -93,6 +93,7 @@ ObjectMapper Class Method | Purpose
 ObjectQuery Class Method | Purpose
 -----------|--------
 ```public static void addObjectToTable(Object obj)``` | Adds the object to the database table.<br/> *Must use the ObjectMapper Methods first to create the table before adding Object to Database*
+```public static List<Object> returnAllObjectsFromTable(String tableName)``` | Returns a List of All Objects From the Table<br/>*Query: SELECT * FROM tableName;*
 ```public static List<Object> returnObjectsWhereColumnIs(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName = Value;*
 ```public static List<Object> returnObjectsWhereColumnIsLessThan(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName < Value;*
 ```public static List<Object> returnObjectsWhereColumnIsGreaterThan(String tableName, String ColumnName, String Value)``` | Returns a List of Objects where the condition is met<br/>*Query: SELECT * FROM tableName WHERE ColumnName > Value;*

@@ -65,7 +65,80 @@ public class ObjectQuery {
 		}
 
 	}
+	
+	/**
+	 * Returns a List of all Objects from the table
+	 * @param tableName String of the TableName defined by the User using the
+	 *                   {@code @Table} Annotation
+	 * @return A list of all the Objects from the table
+	 */
+	public static List<Object> returnAllObjectsFromTable(String tableName) {
+		// Gets all tables in our Object Mapper
+		tables = ObjectMapper.getTables();
+		// Initializes a List of objects to return
+		List<Object> objListtoReturn = new ArrayList<>();
+		// Finds the class from the table name given
+		Class<?> calledClass = tables.entrySet().stream()
+				.filter((entry -> entry.getValue().getTableName().equals(tableName))).map(Map.Entry::getKey).findFirst()
+				.get();
+		// Get the DataSource (Connection Pooling Object)
+		DataSource ds = ObjectMapper.getDs();
+		// Builds a Query
+		StringBuilder query = new StringBuilder(
+				"SELECT * FROM " + tableName + ";");
+		// Try with Resources (connection object) - closes connection automatically
+		try (Connection conn = ds.getConnection()) {
+			// Creates the Prepared Statement using Query
+			PreparedStatement pstmt = conn.prepareStatement(query.toString());
+			// Executes Query to get Result Set
+			ResultSet rs = pstmt.executeQuery();
+			// Get the ResultSet's MetaData for the Column Count
+			ResultSetMetaData md = rs.getMetaData();
+			// Create and Object Getter and Setter Object to Create the Objects
+			ObjectGetterAndSetter ogas = new ObjectGetterAndSetter();
+			// While loop that iterates over every object returned from the Query
+			while (rs.next()) {
+				// Creates a new Object
+				Object objToReturn = new Object();
+				// Try Catch block to create a new Instance of the Object, (uses the no args
+				// constructor)
+				try {
+					// Gets the No Args Constructor
+					Constructor<?> c = calledClass.getDeclaredConstructor();
+					// Sets Accessibility of No Args Construct to True
+					c.setAccessible(true);
+					// Creates the Object to Return from the No Args Constructor
+					objToReturn = calledClass.getDeclaredConstructor().newInstance();
+				} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+					e1.printStackTrace();
+				}
+				// For loop that iterates through each column of the result set
+				for (int i = 1; i <= md.getColumnCount(); i++) {
+					// If the Class Returned is BigDecimal, change it to float
+					if (rs.getObject(i).getClass().equals(BigDecimal.class)) {
+						BigDecimal value = (BigDecimal) rs.getObject(i);
+						float f = value.floatValue();
+						// Invokes the Setter by Passing in the Obj that will have field set, the Field
+						// name, and the Field Value
+						ogas.invokeSetter(objToReturn, md.getColumnName(i), f);
+					} else {
+						// Invokes the Setter by Passing in the Obj that will have field set, the Field
+						// name, and the Field Value
+						ogas.invokeSetter(objToReturn, md.getColumnName(i), rs.getObject(i));
+					}
+				}
+				// Adds the new Object to the List
+				objListtoReturn.add(objToReturn);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// Returns the List of Objects
+		return objListtoReturn;
 
+	}
+	
 	/**
 	 * Returns the Objects that match Query of Database to Query one column.
 	 * <p>
