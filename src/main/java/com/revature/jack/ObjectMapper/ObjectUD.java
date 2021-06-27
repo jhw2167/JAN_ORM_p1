@@ -27,6 +27,8 @@ public class ObjectUD {
 	static Map<Class<?>, SQLTable> tables;
 	static SQLTable table;
 
+	
+	
 	public static void removeObjectFromTable(Car car)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		tables = ObjectMapper.getTables();
@@ -79,10 +81,10 @@ public class ObjectUD {
 		
 	}
 	
-	public static void updateObjectToTable(Object obj, Object newObj)
+	public static void updateObjectToTable(Object newObj)
 			throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		tables = ObjectMapper.getTables();
-		table = tables.get(obj.getClass());
+		table = tables.get(newObj.getClass());
 		PreparedStatement pstmt;
 		int pKey = 0;
 		DataSource ds = ObjectMapper.getDs();
