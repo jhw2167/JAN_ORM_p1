@@ -53,14 +53,9 @@ public class ObjectMapper {
 		ds = cp.setUpPool();
 	}
 	
-	
-	//Logger
-	private static final Logger log = LoggerFactory.getLogger(ObjectMapper.class);
 
-	
 	/* Methods */
-	
-	
+		
 	//Constructor
 	private ObjectMapper() {
 		super();
@@ -120,17 +115,10 @@ public class ObjectMapper {
 		Collection<SQLTable> buildables = orderTablesByFK();
 		String errTable = "";
 		
-		try {
 			for (SQLTable t : buildables) {
 				errTable = t.getTableName();
 				createTable(t);
 			}
-		} catch(SQLException e) {
-			String err = "SQL Exception generated from mapping with message " + e.getMessage();
-			System.out.println(err);
-			throw new NotMappableException(errTable);
-		}
-		
 	}
 	//END BUILDMODEL METHOD
 	
@@ -263,7 +251,7 @@ public class ObjectMapper {
 	
 	
 	/* Drop table query */
-	public static boolean dropTable(SQLTable table, boolean cascade) throws SQLException 
+	public static boolean dropTable(SQLTable table, boolean cascade) throws NotMappableException 
 	{
 		String query = "DROP TABLE IF EXISTS " + table.getTableName();
 		
@@ -273,9 +261,37 @@ public class ObjectMapper {
 		query += ";";
 		
 		//Set and execute our prepared statement
-		Connection conn = ds.getConnection();
-		PreparedStatement pstmt = conn.prepareStatement(query);
-		return pstmt.execute();
+		boolean dropSuccess = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(query);
+			pstmt.execute();
+			
+		} catch (SQLException e) {
+			System.out.println("SQLException caught trying to drop table: " + table.getTableName());
+		} 
+		finally 
+		{	
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				// Close the Connection Object
+				if (conn!= null) {
+					conn.close();
+				}
+			} catch(SQLException e) {
+				System.out.println("Critical Error trying to close DB connections, exiting");
+				System.exit(1);
+			}
+			
+		}
+		//END FINALLY
+	
+		return dropSuccess;
 	}
 	
 	
@@ -287,7 +303,7 @@ public class ObjectMapper {
 	 * 		- terminate query with );
 	 * 		- set in prepared stmt and execute
 	 */
-	static boolean createTable(SQLTable table) throws SQLException 
+	static boolean createTable(SQLTable table) throws NotMappableException 
 	{	
 		//Drop table if exists
 		dropTable(table, true);
@@ -360,14 +376,39 @@ public class ObjectMapper {
 		
 		System.out.println("About to get connection");
 		
-		Connection conn = ds.getConnection();
+		//Set and execute our prepared statement
+		boolean createSuccess = false;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
 		
-		String errTable = table.getTableName();
-		System.out.println("Creating table: " + errTable + ", columns: " + cols);
+		try {
+			System.out.println("\n\nFinal query:\n" + query.toString());
+			conn = ds.getConnection();
+			pstmt = conn.prepareStatement(query.toString());
+			createSuccess = pstmt.execute();
+			
+		} catch (SQLException e) {
+			System.out.println("SQLException caught trying to create table: " + table.getTableName());
+		} 
+		finally 
+		{	
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				// Close the Connection Object
+				if (conn!= null) {
+					conn.close();
+				}
+			} catch(SQLException e) {
+				System.out.println("Critical Error trying to close DB connections, exiting");
+				System.exit(1);
+			}
+			
+		}
+		//END FINALLY
 		
-		System.out.println("\n\nFinal query:\n" + query.toString());
-		PreparedStatement pstmt = conn.prepareStatement(query.toString());
-		return pstmt.execute();
+		return createSuccess;
 	}
 	//END CREATE TABLE METHOD
 	
@@ -386,7 +427,7 @@ public class ObjectMapper {
 			}
 			
 		} catch (SQLException e) {
-			log.error("Could not connect to the database in ObjectMapper::createTable");
+			System.out.println("Could not connect to the database in ObjectMapper::createTable");
 			return null;
 		}
 		
