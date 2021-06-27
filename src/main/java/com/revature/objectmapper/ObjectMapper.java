@@ -112,11 +112,14 @@ public class ObjectMapper {
 	 *  use it unless you want to start fresh
 	 */
 	public static void buildDBFromModel() throws ForeignKeyException, NotMappableException {
+		System.out.println("Entering BuildDB from model");
 		Collection<SQLTable> buildables = orderTablesByFK();
+		System.out.println("Successfully ordered tables by Fk");
 		String errTable = "";
 		
 			for (SQLTable t : buildables) {
 				errTable = t.getTableName();
+				System.out.println("Attempting to create table: " + errTable);
 				createTable(t);
 			}
 	}
@@ -379,7 +382,7 @@ public class ObjectMapper {
 		PreparedStatement pstmt = null;
 		
 		try {
-			//System.out.println("\n\nFinal query:\n" + query.toString());
+			System.out.println("\n\nFinal query:\n" + query.toString());
 			conn = ds.getConnection();
 			pstmt = conn.prepareStatement(query.toString());
 			createSuccess = pstmt.execute();
