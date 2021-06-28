@@ -9,7 +9,6 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 ## TechStack
 * Java - _version 8.0_
 * JUnit - _version 42.2.12_
-* Mockito - _version 1.10.19_
 * Apache Maven - _version 3.8.1_
 * PostGreSQL - _deployed on AWS RDS_
 * Git Source Code Management (on GitHub) 
