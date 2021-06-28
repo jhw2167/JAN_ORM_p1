@@ -123,7 +123,7 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 </thead>
 <tbody>
 <tr>
-<td><pre lang="JAVA"><code>public static void  addToModel(Class&lt;?&gt; c)</code></td>
+<td><pre lang="JAVA"><code>public static void addToModel(Class&lt;?&gt; c)</code></td>
 <td>Adds the annotated class to the a local model of classes</td>
 </tr>
 <tr>
@@ -159,7 +159,8 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 <td>Adds the object to the database table.<br/> <em>Must use the ObjectMapper Methods first to create the table before adding Object to Database</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnAllObjectsFromTable(String tableName)</code></td>
+<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnAllObjectsFromTable(
+        String tableName)</code></td>
 <td>Returns a List of All Objects From the Table<br/><em>Query: SELECT </em> FROM tableName;*</td>
 </tr>
 <tr>
