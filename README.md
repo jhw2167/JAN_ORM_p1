@@ -131,7 +131,8 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 <td>Removes the annotated class from the local model of classes</td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static boolean removeFromDB(Class&lt;?&gt; c, boolean cascadeDelete)</code></td>
+<td><pre lang="JAVA"><code>public static boolean removeFromDB(Class&lt;?&gt; c, 
+        boolean cascadeDelete)</code></td>
 <td>Removes the annotated class from the local model of classes and from the database</td>
 </tr>
 <tr>
@@ -162,48 +163,57 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 <td>Returns a List of All Objects From the Table<br/><em>Query: SELECT </em> FROM tableName;*</td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIs(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIs(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns a List of Objects where the condition is met<br/><em>Query: SELECT </em> FROM tableName WHERE ColumnName = Value;*</td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIsLessThan(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIsLessThan(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns a List of Objects where the condition is met<br/><em>Query: SELECT </em> FROM tableName WHERE ColumnName &lt; Value;*</td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIsGreaterThan(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnIsGreaterThan(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns a List of Objects where the condition is met<br/><em>Query: SELECT </em> FROM tableName WHERE ColumnName &gt; Value;*</td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhere2ColumnsAre(String tableName,
-        String ColumnName, String Value, String ColumnName2, String Value2)</code></td>
+<td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhere2ColumnsAre(
+        String tableName, String ColumnName,
+        String Value, String ColumnName2,
+        String Value2)</code></td>
 <td>Returns a List of Objects where two condition are met<br/><em>Query: SELECT </em> FROM tableName WHERE ColumnName = Value AND ColumnName2 = Value2;*</td>
 </tr>
 <tr>
 <td><pre lang="JAVA"><code>public static List&lt;Object&gt; returnObjectsWhereColumnsAre(
-        String tableName, String[] ColumnNames, String[] Operands, String[] Values)</code></td>
+        String tableName, String[] ColumnNames,
+        String[] Operands, String[] Values)</code></td>
 <td>Returns a List of Objects where columnNames.length conditions are met<br/><em>Query: SELECT </em> FROM tableName WHERE ColumnName[0] Operand[0] Value[0] AND ColumnName[1] Operand[1] Value[1] AND ... ColumnName[n] Operand[n] Value[n];* </td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIs(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIs(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns Count of the number of objects in the database where the condition is met<br/><em>Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName = Value;</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIsLessThan(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIsLessThan(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns Count of the number of objects in the database where the condition is met<br/><em>Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName &lt;&gt; Value;</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIsGreaterThan(String tableName,
-        String ColumnName, String Value)</code></td>
+<td><pre lang="JAVA"><code>public static int returnCountOfObjectsWhereColumnIsGreaterThan(
+        String tableName, String ColumnName,
+        String Value)</code></td>
 <td>Returns Count of the number of objects in the database where the condition is met<br/><em>Query: SELECT COUNT(ColumnName) FROM tableName WHERE ColumnName &gt; Value;</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static void removeObjectFromTable(Object obj,
-        String tableName)</code></td>
+<td><pre lang="JAVA"><code>public static void removeObjectFromTable(
+        Object obj, String tableName)</code></td>
 <td>Removes given object from the database <br/><em>Query: DELETE FROM tableName WHERE id = obj.Id;</em></td>
 </tr>
 <tr>
@@ -211,8 +221,9 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 <td>Truncates given table in the database <br/><em>Query: TRUNCATE TABLE tableName;</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static void udpateAllWhere (String tableName,
-        String columnName, String oldValue, String newValue)</code></td>
+<td><pre lang="JAVA"><code>public static void udpateAllWhere (
+        String tableName, String columnName,
+        String oldValue, String newValue)</code></td>
 <td>Updates all values in the given column that match oldValue to newValue <br/><em>Query: UPDATE tableName SET columnName = newValue WHERE columnName = oldValue;</em></td>
 </tr>
 <tr>
@@ -220,7 +231,7 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 <td>Updates the object in the database to the values passed in the the newObj. Object to be updated is based on the primary key value. <br/><em>Query: UPDATE tableName SET column1 = value1, column2 = value2,... WHERE id = newObj.Id;</em></td>
 </tr>
 <tr>
-<td><pre lang="JAVA"><code>public static ObjectCache getCache()public static ObjectCache getCache()</code></td>
+<td><pre lang="JAVA"><code>public static ObjectCache getCache()</code></td>
 <td>Used to get an ObjectCache object to perform ObjectCache methods</td>
 </tr>
 </tbody>
