@@ -132,3 +132,4 @@ DatabaseTransaction Class Method | Purpose
 ```public static void rollbackTransaction()``` | Used to begin a Transaction<br/>*Query: ROLLBACK;*
 
 #### Examples
+https://user-images.githubusercontent.com/82348878/123563835-87d91700-d77c-11eb-8bc1-db6e3f5480aa.png
