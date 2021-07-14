@@ -46,8 +46,6 @@ JAN ORM is a Java based lightweight Object Relational Mapper used for connection
 ### Clone the Application
 ```shell
   git clone <this-repo>
-  cd JAN_ORM_p1
-  mvn install
 ```
 ### Place Dependency Inside Your Project pom.xml File
 ```XML
@@ -90,7 +88,7 @@ For a class to be persisted to the database, it must be a **JavaBean** and **ann
 </tr>
 <tr>
 <td><pre lang="JAVA"><code>@ForeignKey(refColumn = &quot;ref_field&quot;,
-refClass = &quot;ref_class&quot;)</code></td>
+        refClass = &quot;ref_class&quot;)</code></td>
 <td>Indicates to the ORM that this field is a Foreign Key that references class &#39;ref_class&#39; and its field &#39;ref_field&#39;</td>
 </tr>
 <tr>
